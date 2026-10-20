@@ -1,0 +1,344 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <!-- Base Window / Control Typography -->
+  <Style Selector=":is(TemplatedControl)">
+    <Setter Property="FontFamily" Value="Roboto, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" />
+  </Style>
+  <Style Selector="TextBlock">
+    <Setter Property="FontFamily" Value="Roboto, Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" />
+  </Style>
+
+  <!-- Global Button CornerRadius & ContentPresenter fix for square hover/shadows -->
+  <Style Selector="Button">
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+  <Style Selector="Button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+  <Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+  <Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+
+  <!-- Global RadioButton CornerRadius & ContentPresenter fix for square hover -->
+  <Style Selector="RadioButton">
+    <Setter Property="CornerRadius" Value="10" />
+  </Style>
+  <Style Selector="RadioButton /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="RadioButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="10" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- M3 Navigation Rail Circular Button -->
+  <Style Selector="Button.m3-nav-btn">
+    <Setter Property="Width" Value="52" />
+    <Setter Property="Height" Value="52" />
+    <Setter Property="CornerRadius" Value="26" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.m3-nav-btn /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="26" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.m3-nav-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="26" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.m3-nav-btn:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="26" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+
+  <!-- Transparent Card Button (Wraps clickable cards without drawing square backgrounds) -->
+  <Style Selector="Button.transparent-card-btn">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+  <Style Selector="Button.transparent-card-btn /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="18" />
+    <Setter Property="Background" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.transparent-card-btn:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="CornerRadius" Value="18" />
+  </Style>
+  <Style Selector="Button.transparent-card-btn:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="CornerRadius" Value="18" />
+  </Style>
+
+  <!-- M3 Icon Button (Standard 40x40 / 48x48 circular) -->
+  <Style Selector="Button.m3-icon-button">
+    <Setter Property="Width" Value="40" />
+    <Setter Property="Height" Value="40" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource onSurfaceVariant}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.m3-icon-button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+  <Style Selector="Button.m3-icon-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource stateLayerHover}" />
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+  <Style Selector="Button.m3-icon-button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource stateLayerPressed}" />
+    <Setter Property="CornerRadius" Value="{Binding $parent[Button].CornerRadius}" />
+  </Style>
+
+  <!-- M3 Primary Filled Button -->
+  <Style Selector="Button.m3-filled-button">
+    <Setter Property="Background" Value="{DynamicResource primary}" />
+    <Setter Property="Foreground" Value="{DynamicResource onPrimary}" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="20,10" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.m3-filled-button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+  <Style Selector="Button.m3-filled-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource primary}" />
+    <Setter Property="Opacity" Value="0.92" />
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+  <Style Selector="Button.m3-filled-button:pressed">
+    <Setter Property="RenderTransform" Value="scale(0.98)" />
+  </Style>
+
+  <!-- M3 Tonal Button -->
+  <Style Selector="Button.m3-tonal-button">
+    <Setter Property="Background" Value="{DynamicResource secondaryContainer}" />
+    <Setter Property="Foreground" Value="{DynamicResource onSecondaryContainer}" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="16,9" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.12" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.m3-tonal-button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+  <Style Selector="Button.m3-tonal-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource secondaryContainer}" />
+    <Setter Property="Opacity" Value="0.88" />
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+
+  <!-- M3 Outlined Button -->
+  <Style Selector="Button.m3-outlined-button">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="Foreground" Value="{DynamicResource primary}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource outlineVariant}" />
+    <Setter Property="BorderThickness" Value="1.2" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="16,8" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Cursor" Value="Hand" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Button.m3-outlined-button /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+  <Style Selector="Button.m3-outlined-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource stateLayerHover}" />
+    <Setter Property="CornerRadius" Value="20" />
+  </Style>
+
+  <!-- M3 Card Styles -->
+  <Style Selector="Border.m3-card">
+    <Setter Property="Background" Value="{DynamicResource surfaceContainerLow}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource outlineVariant}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="20" />
+    <Setter Property="Padding" Value="20" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.25" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="Border.m3-card-elevated">
+    <Setter Property="Background" Value="{DynamicResource surfaceContainer}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource outlineVariant}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="24" />
+    <Setter Property="Padding" Value="24" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.25" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <!-- TextBox Styling -->
+  <Style Selector="TextBox">
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Background" Value="{DynamicResource surfaceContainerHighest}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource outlineVariant}" />
+    <Setter Property="Foreground" Value="{DynamicResource onSurface}" />
+    <Setter Property="Padding" Value="14,10" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.18" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+    <Setter Property="BorderBrush" Value="{DynamicResource primary}" />
+    <Setter Property="BorderThickness" Value="2" />
+    <Setter Property="CornerRadius" Value="14" />
+  </Style>
+
+  <!-- ComboBox Styling -->
+  <Style Selector="ComboBox">
+    <Setter Property="CornerRadius" Value="14" />
+    <Setter Property="Background" Value="{DynamicResource surfaceContainerHighest}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource outlineVariant}" />
+    <Setter Property="Foreground" Value="{DynamicResource onSurface}" />
+    <Setter Property="Padding" Value="14,8" />
+  </Style>
+
+  <!-- Modal Dialog Smooth Transitions (Zoom-In & Fade-In) -->
+  <Style Selector="Border.modal-backdrop">
+    <Setter Property="Opacity" Value="0.0" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.22" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.modal-backdrop.open">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="IsHitTestVisible" Value="True" />
+  </Style>
+
+  <Style Selector="Border.modal-card">
+    <Setter Property="Opacity" Value="0.0" />
+    <Setter Property="RenderTransform" Value="scale(0.86)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.18" Easing="CubicEaseOut" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.24" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.modal-card.open">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="RenderTransform" Value="scale(1.0)" />
+  </Style>
+
+  <!-- ======================================================================= -->
+  <!-- SMOOTH ANIMATED TOGGLE SWITCH (All Platforms: Desktop, Tablet, Phone)   -->
+  <!-- ======================================================================= -->
+  <Style Selector="ToggleSwitch">
+    <Setter Property="Cursor" Value="Hand" />
+  </Style>
+
+  <Style Selector="ToggleSwitch /template/ Border#SwitchKnobBounds">
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.25" Easing="CubicEaseOut" />
+        <BrushTransition Property="BorderBrush" Duration="0:0:0.25" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="ToggleSwitch /template/ Grid#PART_MovingKnobs">
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Canvas.Left" Duration="0:0:0.24" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <Style Selector="ToggleSwitch /template/ Border#PART_MovingKnob">
+    <Setter Property="Transitions">
+      <Transitions>
+        <BrushTransition Property="Background" Duration="0:0:0.2" Easing="CubicEaseOut" />
+        <DoubleTransition Property="Width" Duration="0:0:0.18" Easing="CubicEaseOut" />
+        <DoubleTransition Property="Height" Duration="0:0:0.18" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <!-- Smooth Screen / Page Slide Transitions -->
+  <Style Selector="Border.page-slide">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <DoubleTransition Property="Opacity" Duration="0:0:0.28" Easing="CubicEaseOut" />
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.28" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+
+  <!-- Mobile Settings Smooth Slide-In / Slide-Out (Left-to-Right & Right-to-Left) -->
+  <Style Selector="Border.mobile-settings-drawer">
+    <Setter Property="RenderTransform" Value="translate(-800px, 0px)" />
+    <Setter Property="Opacity" Value="0.0" />
+    <Setter Property="IsHitTestVisible" Value="False" />
+    <Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.32" Easing="CubicEaseOut" />
+        <DoubleTransition Property="Opacity" Duration="0:0:0.26" Easing="CubicEaseOut" />
+      </Transitions>
+    </Setter>
+  </Style>
+  <Style Selector="Border.mobile-settings-drawer.open">
+    <Setter Property="RenderTransform" Value="translate(0px, 0px)" />
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="IsHitTestVisible" Value="True" />
+  </Style>
+
+</Styles>

@@ -1,0 +1,166 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             xmlns:models="using:aura.Models"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="750"
+             x:Class="aura.Views.ProtocolsView"
+             x:DataType="vm:ProtocolsViewModel">
+
+  <Grid RowDefinitions="Auto,Auto,*">
+
+    <!-- Header bar -->
+    <StackPanel Grid.Row="0" Spacing="4" Margin="0,0,0,16">
+      <TextBlock Text="Supported VPN Protocols &amp; Technologies (Top 30+)"
+                 FontSize="22" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+      <TextBlock Text="Complete universal client support with AmneziaWG (any version), Xray-core &amp; sing-box ecosystem"
+                 FontSize="13" Foreground="{DynamicResource onSurfaceVariant}" />
+    </StackPanel>
+
+    <!-- Search & Category Filters -->
+    <Grid Grid.Row="1" ColumnDefinitions="*,Auto" Margin="0,0,0,16">
+      <TextBox Grid.Column="0" Text="{Binding SearchText, Mode=TwoWay}"
+               PlaceholderText="Search protocols (e.g. AmneziaWG, VLESS, REALITY, Hysteria 2, WireGuard)..."
+               Margin="0,0,12,0" />
+
+      <!-- Category Filter Buttons -->
+      <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+        <Button Command="{Binding SelectCategoryCommand}" CommandParameter="0"
+                Classes="m3-tonal-button" Content="All (30+)" />
+        <Button Command="{Binding SelectCategoryCommand}" CommandParameter="1"
+                Classes="m3-outlined-button" Content="Classic VPN" />
+        <Button Command="{Binding SelectCategoryCommand}" CommandParameter="2"
+                Classes="m3-outlined-button" Content="Modern Proxy" />
+        <Button Command="{Binding SelectCategoryCommand}" CommandParameter="3"
+                Classes="m3-outlined-button" Content="Additional" />
+        <Button Command="{Binding SelectCategoryCommand}" CommandParameter="4"
+                Classes="m3-outlined-button" Content="Transports" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Main Content: Left Protocol List, Right Deep Details -->
+    <Grid Grid.Row="2" ColumnDefinitions="340,*">
+
+      <!-- Left List -->
+      <Border Grid.Column="0" Classes="m3-card" Padding="8" Margin="0,0,12,0">
+        <ScrollViewer>
+          <ItemsControl ItemsSource="{Binding FilteredProtocols}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="models:VpnProtocolInfo">
+                <Border Background="{DynamicResource surfaceContainer}"
+                        BorderBrush="{DynamicResource outlineVariant}"
+                        BorderThickness="1"
+                        CornerRadius="12" Padding="12" Margin="0,0,0,6" Cursor="Hand">
+                  <Button Command="{Binding $parent[UserControl].((vm:ProtocolsViewModel)DataContext).SelectProtocol}"
+                          CommandParameter="{Binding}"
+                          Background="Transparent" BorderThickness="0" Padding="0"
+                          HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                    <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+                      <StackPanel Grid.Column="0" Spacing="2">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                          <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="13" Foreground="{DynamicResource onSurface}" />
+                          <Border Background="{DynamicResource primaryContainer}" CornerRadius="6" Padding="5,1">
+                            <TextBlock Text="{Binding ShortName}" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource onPrimaryContainer}" />
+                          </Border>
+                        </StackPanel>
+                        <TextBlock Text="{Binding Transport}" FontSize="11" Foreground="{DynamicResource outline}" />
+                      </StackPanel>
+
+                      <PathIcon Grid.Column="1" Data="{StaticResource IconChevronRight}" Width="12" Height="12" Foreground="{DynamicResource onSurfaceVariant}" />
+                    </Grid>
+                  </Button>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </ScrollViewer>
+      </Border>
+
+      <!-- Right Detailed Inspector -->
+      <Border Grid.Column="1" Classes="m3-card" Padding="24">
+        <ScrollViewer>
+          <StackPanel Spacing="16" IsVisible="{Binding SelectedProtocol, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+            <!-- Protocol Title & Badge -->
+            <Grid ColumnDefinitions="*,Auto">
+              <StackPanel Grid.Column="0" Spacing="4">
+                <TextBlock Text="{Binding SelectedProtocol.Name}" FontSize="20" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding SelectedProtocol.ShortName, StringFormat='Short identifier: {0}'}" FontSize="12" Foreground="{DynamicResource primary}" />
+              </StackPanel>
+
+              <Border Grid.Column="1" Background="{DynamicResource primaryContainer}"
+                      CornerRadius="12" Padding="12,6" VerticalAlignment="Center">
+                <TextBlock Text="SUPPORTED" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onPrimaryContainer}" />
+              </Border>
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- Description (EN & RU) -->
+            <StackPanel Spacing="8">
+              <TextBlock Text="Description:" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource onSurface}" />
+              <TextBlock Text="{Binding SelectedProtocol.DescriptionEn}" FontSize="13" Foreground="{DynamicResource onSurface}" TextWrapping="Wrap" />
+              <TextBlock Text="{Binding SelectedProtocol.DescriptionRu}" FontSize="13" Foreground="{DynamicResource onSurfaceVariant}" TextWrapping="Wrap" FontStyle="Italic" />
+            </StackPanel>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- Technical Attributes Grid -->
+            <Grid ColumnDefinitions="*,*">
+              <StackPanel Grid.Column="0" Spacing="6" Margin="0,0,8,0">
+                <TextBlock Text="Transport Layer:" FontSize="11" Foreground="{DynamicResource outline}" />
+                <TextBlock Text="{Binding SelectedProtocol.Transport}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource primary}" />
+
+                <TextBlock Text="UDP Support:" FontSize="11" Foreground="{DynamicResource outline}" Margin="0,8,0,0" />
+                <TextBlock Text="{Binding SelectedProtocol.SupportsUdp, StringFormat='{}{0}'}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+              </StackPanel>
+
+              <StackPanel Grid.Column="1" Spacing="6" Margin="8,0,0,0">
+                <TextBlock Text="Obfuscation / DPI Bypass:" FontSize="11" Foreground="{DynamicResource outline}" />
+                <TextBlock Text="{Binding SelectedProtocol.Obfuscation}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource secondary}" TextWrapping="Wrap" />
+
+                <TextBlock Text="DPI Resistant:" FontSize="11" Foreground="{DynamicResource outline}" Margin="0,8,0,0" />
+                <TextBlock Text="{Binding SelectedProtocol.DpiResistant, StringFormat='{}{0}'}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource primary}" />
+              </StackPanel>
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- Key Features -->
+            <StackPanel Spacing="8">
+              <TextBlock Text="Key Features &amp; Implementation Details:" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource onSurface}" />
+              <ItemsControl ItemsSource="{Binding SelectedProtocol.KeyFeatures}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,3">
+                      <PathIcon Data="{StaticResource IconCheck}" Width="14" Height="14" Foreground="{DynamicResource primary}" VerticalAlignment="Center" />
+                      <TextBlock Text="{Binding}" FontSize="12" Foreground="{DynamicResource onSurface}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+
+            <!-- Special Documentation Notice for AmneziaWG -->
+            <Border Background="{DynamicResource secondaryContainer}" BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+                    CornerRadius="14" Padding="16"
+                    IsVisible="{Binding SelectedProtocol.Id, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='amneziawg'}">
+              <StackPanel Spacing="6">
+                <TextBlock Text="AmneziaWG Universal Documentation Reference:"
+                           FontWeight="Bold" FontSize="13" Foreground="{DynamicResource onSecondaryContainer}" />
+                <TextBlock Text="Full parameter support for ALL AWG versions: Jc (junk count), Jmin/Jmax (junk sizes), S1/S2 (init/resp junk), and H1, H2, H3, H4 (custom magic header bytes) to fully defeat Russian TSPU / DPI inspection."
+                           FontSize="12" Foreground="{DynamicResource onSecondaryContainer}" TextWrapping="Wrap" />
+                <TextBlock Text="Official Docs: https://docs.amnezia.org/ru/documentation/amnezia-wg/"
+                           FontSize="12" Foreground="{DynamicResource primary}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Border>
+
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+
+    </Grid>
+
+  </Grid>
+</UserControl>

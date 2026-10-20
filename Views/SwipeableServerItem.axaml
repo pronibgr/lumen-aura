@@ -1,0 +1,136 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="using:aura.Models"
+             xmlns:vm="using:aura.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="60"
+             x:Class="aura.Views.SwipeableServerItem"
+             x:DataType="models:ServerNode"
+             ClipToBounds="True">
+
+  <Grid x:Name="RootContainer" Margin="0,3">
+
+    <!-- 1. BACKGROUND ACTION LAYERS (Revealed on Swipe) -->
+    <!-- Left Action Background: Ping (Swipe Left-to-Right) -->
+    <Border x:Name="LeftActionBg" CornerRadius="16"
+            Background="#10b981" Opacity="0.0" IsHitTestVisible="False">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left"
+                  VerticalAlignment="Center" Margin="18,0,0,0" Spacing="8">
+        <PathIcon Data="{StaticResource IconSpeedometer}" Width="16" Height="16" Foreground="White" />
+        <TextBlock x:Name="LeftActionText" Text="Пинг" FontWeight="Bold" FontSize="13" Foreground="White"
+                   VerticalAlignment="Center" />
+      </StackPanel>
+    </Border>
+
+    <!-- Right Action Background: Delete (Swipe Right-to-Left) -->
+    <Border x:Name="RightActionBg" CornerRadius="16"
+            Background="#ef4444" Opacity="0.0" IsHitTestVisible="False">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+                  VerticalAlignment="Center" Margin="0,0,18,0" Spacing="8">
+        <TextBlock x:Name="RightActionText" Text="Удалить" FontWeight="Bold" FontSize="13" Foreground="White"
+                   VerticalAlignment="Center" />
+        <PathIcon Data="{StaticResource IconTrash}" Width="16" Height="16" Foreground="White" />
+      </StackPanel>
+    </Border>
+
+    <!-- 2. FOREGROUND SERVER CARD -->
+    <Border x:Name="CardBorder" CornerRadius="16" Padding="10,8"
+            BorderThickness="1.2"
+            Background="{DynamicResource surfaceContainer}"
+            BorderBrush="{DynamicResource outlineVariant}"
+            Cursor="Hand">
+
+      <Border.Styles>
+        <Style Selector="Border#CardBorder:pointerover">
+          <Setter Property="Background" Value="{DynamicResource surfaceContainerHigh}" />
+          <Setter Property="BorderBrush" Value="{DynamicResource primary}" />
+        </Style>
+      </Border.Styles>
+
+      <!-- PC Right-Click Context Menu -->
+      <Border.ContextMenu>
+        <ContextMenu>
+          <MenuItem x:Name="MenuPing" Header="Проверить пинг" Click="OnContextMenuPingClicked">
+            <MenuItem.Icon>
+              <PathIcon Data="{StaticResource IconSpeedometer}" Width="14" Height="14" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <MenuItem x:Name="MenuCopy" Header="Копировать JSON" Click="OnContextMenuCopyClicked">
+            <MenuItem.Icon>
+              <PathIcon Data="{StaticResource IconFile}" Width="14" Height="14" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator />
+          <MenuItem x:Name="MenuDelete" Header="Удалить" Click="OnContextMenuDeleteClicked" Foreground="#ef4444">
+            <MenuItem.Icon>
+              <PathIcon Data="{StaticResource IconTrash}" Width="14" Height="14" Foreground="#ef4444" />
+            </MenuItem.Icon>
+          </MenuItem>
+        </ContextMenu>
+      </Border.ContextMenu>
+
+      <Grid ColumnDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Center">
+
+        <!-- Column 0: Country Flag Badge -->
+        <Border Grid.Column="0" Width="40" Height="32" CornerRadius="8"
+                Background="{DynamicResource secondaryContainer}"
+                BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+                Margin="0,0,10,0" VerticalAlignment="Center">
+          <TextBlock Text="{Binding FlagEmoji}" FontSize="18"
+                     HorizontalAlignment="Center" VerticalAlignment="Center" />
+        </Border>
+
+        <!-- Column 1: Server Name & Transport / Security -->
+        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+          <TextBlock Text="{Binding DisplayName}" Foreground="{DynamicResource onSurface}"
+                     FontSize="13" FontWeight="SemiBold"
+                     TextTrimming="CharacterEllipsis" MaxWidth="220" />
+
+          <TextBlock Text="{Binding TransportSecurity}"
+                     Foreground="{DynamicResource onSurfaceVariant}"
+                     FontSize="10.5" TextTrimming="CharacterEllipsis" MaxWidth="220" />
+        </StackPanel>
+
+        <!-- Column 2: Ping Latency Badge (No ping button right on card!) -->
+        <Border Grid.Column="2" Background="{Binding PingBadgeBackground}"
+                CornerRadius="8" Padding="7,3" Margin="0,0,8,0"
+                IsVisible="{Binding IsPingBadgeVisible}"
+                VerticalAlignment="Center">
+          <Border.Transitions>
+            <Transitions>
+              <BrushTransition Property="Background" Duration="0:0:0.35" Easing="CubicEaseInOut" />
+              <DoubleTransition Property="Opacity" Duration="0:0:0.25" Easing="CubicEaseInOut" />
+            </Transitions>
+          </Border.Transitions>
+          <TextBlock Text="{Binding DisplayPing}"
+                     Foreground="{Binding PingStatusColor}"
+                     FontWeight="Bold" FontSize="11">
+            <TextBlock.Transitions>
+              <Transitions>
+                <BrushTransition Property="Foreground" Duration="0:0:0.35" Easing="CubicEaseInOut" />
+              </Transitions>
+            </TextBlock.Transitions>
+          </TextBlock>
+        </Border>
+
+        <!-- Column 3: Selection / Active Checkmark Circle -->
+        <Border Grid.Column="3" Width="22" Height="22" CornerRadius="11"
+                VerticalAlignment="Center">
+          <Grid>
+            <Border CornerRadius="11" Background="{DynamicResource primary}"
+                    IsVisible="{Binding IsSelected}">
+              <PathIcon Data="{StaticResource IconCheck}" Width="10" Height="10"
+                        Foreground="{DynamicResource onPrimary}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <Border CornerRadius="11" BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1.5"
+                    IsVisible="{Binding !IsSelected}" />
+          </Grid>
+        </Border>
+
+      </Grid>
+    </Border>
+
+  </Grid>
+</UserControl>

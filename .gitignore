@@ -1,0 +1,27 @@
+# C# / .NET / Avalonia
+bin/
+obj/
+*.user
+*.suo
+.vs/
+.idea/
+.vscode/
+*.log
+
+# Android builds
+*.apk
+*.aab
+*.keystore
+*.jks
+
+# AUR / makepkg build folders & tarballs
+aur/pkg/
+aur/src/
+aur/*.pkg.tar.*
+aur/*.tar.gz
+aur/*.tar.xz
+aur/*.tar.zst
+
+# OS artifacts
+*.DS_Store
+Thumbs.db

@@ -1,0 +1,743 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             xmlns:views="using:aura.Views"
+             xmlns:models="using:aura.Models"
+             mc:Ignorable="d" d:DesignWidth="1200" d:DesignHeight="800"
+             x:Class="aura.Views.MainAdaptiveView"
+             x:DataType="vm:MainViewModel"
+             Background="{DynamicResource surface}">
+
+  <UserControl.Transitions>
+    <Transitions>
+      <BrushTransition Property="Background" Duration="0:0:0.25" />
+    </Transitions>
+  </UserControl.Transitions>
+
+  <Grid Background="{DynamicResource surface}">
+
+    <!-- ======================================================================= -->
+    <!-- 1. TABLET & PC LAYOUT (Screen Width >= 720dp)                            -->
+    <!-- Side navigation rail, 2-column servers split, telemetry dashboard       -->
+    <!-- ======================================================================= -->
+    <Grid ColumnDefinitions="Auto,*" Background="{DynamicResource surface}"
+          IsVisible="{Binding !IsPhoneMode}">
+      
+      <!-- LEFT NAVIGATION RAIL -->
+      <Border Grid.Column="0"
+              Width="{Binding ToolbarWidth}"
+              Background="{DynamicResource surfaceContainer}"
+              BorderBrush="{DynamicResource outlineVariant}"
+              BorderThickness="0,0,1,0">
+
+        <Border.Transitions>
+          <Transitions>
+            <DoubleTransition Property="Width" Duration="0:0:0.22" Easing="CubicEaseOut" />
+            <BrushTransition Property="Background" Duration="0:0:0.25" />
+          </Transitions>
+        </Border.Transitions>
+
+        <Grid RowDefinitions="Auto,*,Auto" Margin="0,16">
+
+          <!-- TOP: Menu Button -->
+          <Grid Grid.Row="0" Margin="0,0,0,20">
+            <!-- Collapsed State: Centered in 96dp -->
+            <Button Command="{Binding ToggleToolbarCommand}"
+                    Classes="m3-nav-btn"
+                    HorizontalAlignment="Center"
+                    ToolTip.Tip="Toggle sidebar"
+                    IsVisible="{Binding !IsToolbarExpanded}">
+              <PathIcon Data="{StaticResource IconMenu}" Width="22" Height="22"
+                        Foreground="{DynamicResource onSurface}" />
+            </Button>
+
+            <!-- Expanded State -->
+            <Button Command="{Binding ToggleToolbarCommand}"
+                    Classes="transparent-card-btn"
+                    HorizontalAlignment="Left"
+                    Margin="16,0,0,0"
+                    ToolTip.Tip="Toggle sidebar"
+                    IsVisible="{Binding IsToolbarExpanded}">
+              <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                <PathIcon Data="{StaticResource IconMenu}" Width="22" Height="22"
+                          Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="lumen aura" FontSize="16" FontWeight="Bold"
+                           Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+          <!-- CENTER: Navigation Rail Buttons -->
+          <Grid Grid.Row="1">
+
+            <!-- Collapsed (Icon-Only circular buttons) -->
+            <StackPanel Spacing="14" HorizontalAlignment="Center"
+                        IsVisible="{Binding !IsToolbarExpanded}">
+
+              <!-- + Add Button -->
+              <Button Command="{Binding OpenAddDialogCommand}"
+                      Classes="m3-nav-btn"
+                      ToolTip.Tip="{Binding Loc[AddSubscription]}">
+                <Border Width="52" Height="52" CornerRadius="26"
+                        Background="{DynamicResource addNavBackground}">
+                  <PathIcon Data="{StaticResource IconPlus}" Width="20" Height="20"
+                            Foreground="{DynamicResource onSecondaryContainer}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Border>
+              </Button>
+
+              <!-- Destination 0: Servers -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="0"
+                      Classes="m3-nav-btn"
+                      ToolTip.Tip="{Binding Loc[NavServers]}">
+                <Border Width="52" Height="52" CornerRadius="26">
+                  <Grid>
+                    <Border CornerRadius="26" Background="{DynamicResource secondaryContainer}"
+                            IsVisible="{Binding IsServersActive}" />
+                    <Border CornerRadius="26" Background="{DynamicResource surfaceContainerHigh}"
+                            IsVisible="{Binding !IsServersActive}" Opacity="0.5" />
+
+                    <PathIcon Data="{StaticResource IconLanguage}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSurfaceVariant}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding !IsServersActive}" />
+                    <PathIcon Data="{StaticResource IconLanguage}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSecondaryContainer}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding IsServersActive}" />
+                  </Grid>
+                </Border>
+              </Button>
+
+              <!-- Destination 1: Settings -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="1"
+                      Classes="m3-nav-btn"
+                      ToolTip.Tip="{Binding Loc[NavSettings]}">
+                <Border Width="52" Height="52" CornerRadius="26">
+                  <Grid>
+                    <Border CornerRadius="26" Background="{DynamicResource secondaryContainer}"
+                            IsVisible="{Binding IsSettingsActive}" />
+                    <Border CornerRadius="26" Background="{DynamicResource surfaceContainerHigh}"
+                            IsVisible="{Binding !IsSettingsActive}" Opacity="0.5" />
+
+                    <PathIcon Data="{StaticResource IconSettings}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSurfaceVariant}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding !IsSettingsActive}" />
+                    <PathIcon Data="{StaticResource IconSettings}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSecondaryContainer}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding IsSettingsActive}" />
+                  </Grid>
+                </Border>
+              </Button>
+
+              <!-- Destination 2: Logs -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="2"
+                      Classes="m3-nav-btn"
+                      ToolTip.Tip="{Binding Loc[NavLogs]}">
+                <Border Width="52" Height="52" CornerRadius="26">
+                  <Grid>
+                    <Border CornerRadius="26" Background="{DynamicResource secondaryContainer}"
+                            IsVisible="{Binding IsLogsActive}" />
+                    <Border CornerRadius="26" Background="{DynamicResource surfaceContainerHigh}"
+                            IsVisible="{Binding !IsLogsActive}" Opacity="0.5" />
+
+                    <PathIcon Data="{StaticResource IconLogFile}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSurfaceVariant}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding !IsLogsActive}" />
+                    <PathIcon Data="{StaticResource IconLogFile}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSecondaryContainer}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding IsLogsActive}" />
+                  </Grid>
+                </Border>
+              </Button>
+
+              <!-- Destination 3: About -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="3"
+                      Classes="m3-nav-btn"
+                      ToolTip.Tip="{Binding Loc[NavAbout]}">
+                <Border Width="52" Height="52" CornerRadius="26">
+                  <Grid>
+                    <Border CornerRadius="26" Background="{DynamicResource secondaryContainer}"
+                            IsVisible="{Binding IsAboutActive}" />
+                    <Border CornerRadius="26" Background="{DynamicResource surfaceContainerHigh}"
+                            IsVisible="{Binding !IsAboutActive}" Opacity="0.5" />
+
+                    <PathIcon Data="{StaticResource IconInfo}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSurfaceVariant}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding !IsAboutActive}" />
+                    <PathIcon Data="{StaticResource IconInfo}" Width="22" Height="22"
+                              Foreground="{DynamicResource onSecondaryContainer}"
+                              HorizontalAlignment="Center" VerticalAlignment="Center"
+                              IsVisible="{Binding IsAboutActive}" />
+                  </Grid>
+                </Border>
+              </Button>
+
+            </StackPanel>
+
+            <!-- Expanded (Full Buttons with Labels) -->
+            <StackPanel Spacing="8" Margin="12,0"
+                        IsVisible="{Binding IsToolbarExpanded}">
+
+              <!-- + Add Button -->
+              <Button Command="{Binding OpenAddDialogCommand}"
+                      Classes="transparent-card-btn" Height="52" Margin="0,0,0,8"
+                      ToolTip.Tip="{Binding Loc[AddSubscription]}">
+                <Border Height="52" CornerRadius="18" Padding="12,0"
+                        Background="{DynamicResource addNavBackground}">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="18"
+                            Background="{DynamicResource addNavIconBackground}">
+                      <PathIcon Data="{StaticResource IconPlus}" Width="18" Height="18"
+                                Foreground="{DynamicResource onSecondaryContainer}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Loc[AddSubscription]}" FontSize="13.5" FontWeight="SemiBold"
+                               Margin="12,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource onSurface}" />
+                  </StackPanel>
+                </Border>
+              </Button>
+
+              <!-- Destination 0: Servers -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="0"
+                      Classes="transparent-card-btn" Height="52">
+                <Border Height="52" CornerRadius="18" Padding="12,0"
+                        Background="{DynamicResource surfaceContainerHigh}">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="18"
+                            Background="{DynamicResource secondaryContainer}">
+                      <PathIcon Data="{StaticResource IconLanguage}" Width="18" Height="18"
+                                Foreground="{DynamicResource onSecondaryContainer}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Loc[NavServers]}" FontSize="13.5" FontWeight="SemiBold"
+                               Margin="12,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource onSurface}" />
+                  </StackPanel>
+                </Border>
+              </Button>
+
+              <!-- Destination 1: Settings -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="1"
+                      Classes="transparent-card-btn" Height="52">
+                <Border Height="52" CornerRadius="18" Padding="12,0"
+                        Background="{DynamicResource surfaceContainerHigh}">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="18"
+                            Background="{DynamicResource secondaryContainer}">
+                      <PathIcon Data="{StaticResource IconSettings}" Width="18" Height="18"
+                                Foreground="{DynamicResource onSecondaryContainer}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Loc[NavSettings]}" FontSize="13.5" FontWeight="SemiBold"
+                               Margin="12,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource onSurface}" />
+                  </StackPanel>
+                </Border>
+              </Button>
+
+              <!-- Destination 2: Logs -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="2"
+                      Classes="transparent-card-btn" Height="52">
+                <Border Height="52" CornerRadius="18" Padding="12,0"
+                        Background="{DynamicResource surfaceContainerHigh}">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="18"
+                            Background="{DynamicResource secondaryContainer}">
+                      <PathIcon Data="{StaticResource IconLogFile}" Width="18" Height="18"
+                                Foreground="{DynamicResource onSecondaryContainer}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Loc[NavLogs]}" FontSize="13.5" FontWeight="SemiBold"
+                               Margin="12,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource onSurface}" />
+                  </StackPanel>
+                </Border>
+              </Button>
+
+              <!-- Destination 3: About -->
+              <Button Command="{Binding SelectDestinationCommand}" CommandParameter="3"
+                      Classes="transparent-card-btn" Height="52">
+                <Border Height="52" CornerRadius="18" Padding="12,0"
+                        Background="{DynamicResource surfaceContainerHigh}">
+                  <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                    <Border Width="36" Height="36" CornerRadius="18"
+                            Background="{DynamicResource secondaryContainer}">
+                      <PathIcon Data="{StaticResource IconInfo}" Width="18" Height="18"
+                                Foreground="{DynamicResource onSecondaryContainer}"
+                                HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+                    <TextBlock Text="{Binding Loc[NavAbout]}" FontSize="13.5" FontWeight="SemiBold"
+                               Margin="12,0,0,0" VerticalAlignment="Center"
+                               Foreground="{DynamicResource onSurface}" />
+                  </StackPanel>
+                </Border>
+              </Button>
+
+            </StackPanel>
+
+          </Grid>
+
+          <!-- BOTTOM: Theme Toggle -->
+          <Grid Grid.Row="2" Margin="0,8,0,0">
+            <Button Command="{Binding ToggleThemeCommand}"
+                    Classes="m3-nav-btn"
+                    HorizontalAlignment="Center"
+                    ToolTip.Tip="Toggle Theme"
+                    IsVisible="{Binding !IsToolbarExpanded}">
+              <Border Width="52" Height="52" CornerRadius="26"
+                      Background="{DynamicResource surfaceContainerHigh}">
+                <Grid>
+                  <PathIcon Data="{StaticResource IconDarkMode}" Width="20" Height="20"
+                            Foreground="{DynamicResource onSurfaceVariant}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            IsVisible="{Binding !IsDarkTheme}" />
+                  <PathIcon Data="{StaticResource IconLightMode}" Width="20" Height="20"
+                            Foreground="{DynamicResource primary}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            IsVisible="{Binding IsDarkTheme}" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <Button Command="{Binding ToggleThemeCommand}"
+                    Height="46" Margin="12,0"
+                    Classes="m3-tonal-button"
+                    HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                    IsVisible="{Binding IsToolbarExpanded}">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <PathIcon Data="{StaticResource IconDarkMode}" Width="16" Height="16"
+                          Foreground="{DynamicResource onSecondaryContainer}"
+                          IsVisible="{Binding !IsDarkTheme}" />
+                <PathIcon Data="{StaticResource IconLightMode}" Width="16" Height="16"
+                          Foreground="{DynamicResource onSecondaryContainer}"
+                          IsVisible="{Binding IsDarkTheme}" />
+                <TextBlock Text="Theme" FontSize="12" FontWeight="SemiBold" VerticalAlignment="Center" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+        </Grid>
+      </Border>
+
+      <!-- RIGHT CONTENT AREA (TABLET & PC) -->
+      <Grid Grid.Column="1" Background="{DynamicResource surface}">
+
+        <!-- Destination 0: Servers (Segmented 2-Column Split) -->
+        <Border IsVisible="{Binding IsServersActive}" Padding="20,16">
+          <Grid ColumnDefinitions="420,1,*">
+            <Border Grid.Column="0" Padding="0,0,16,0">
+              <views:SubscriptionsView DataContext="{Binding SubscriptionsVM}" />
+            </Border>
+            <Border Grid.Column="1" Background="{DynamicResource outlineVariant}" Width="1" Opacity="0.4" Margin="0,4" />
+            <Border Grid.Column="2" Padding="20,0,8,0">
+              <views:DashboardView DataContext="{Binding DashboardVM}" />
+            </Border>
+          </Grid>
+        </Border>
+
+        <!-- Destination 1: Settings -->
+        <Border IsVisible="{Binding IsSettingsActive}" Classes="page-slide">
+          <views:SettingsView DataContext="{Binding SettingsVM}" />
+        </Border>
+
+        <!-- Destination 2: Logs -->
+        <Border IsVisible="{Binding IsLogsActive}">
+          <views:LogsView DataContext="{Binding LogsVM}" />
+        </Border>
+
+        <!-- Destination 3: About -->
+        <Border IsVisible="{Binding IsAboutActive}" Padding="36,24">
+          <Border Classes="m3-card-elevated" CornerRadius="28" MaxWidth="620"
+                  HorizontalAlignment="Center" VerticalAlignment="Center" Padding="36">
+            <StackPanel Spacing="20" HorizontalAlignment="Center">
+              <Border Width="72" Height="72" CornerRadius="36" Background="{DynamicResource secondaryContainer}"
+                      HorizontalAlignment="Center">
+                <PathIcon Data="{StaticResource IconLanguage}" Width="36" Height="36"
+                          Foreground="{DynamicResource onSecondaryContainer}"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <StackPanel Spacing="4" HorizontalAlignment="Center">
+                <TextBlock Text="lumen aura" FontSize="26" FontWeight="Bold"
+                           Foreground="{DynamicResource onSurface}" HorizontalAlignment="Center" />
+                <TextBlock Text="Version 1.0.0 (Release Build)" FontSize="12.5"
+                           Foreground="{DynamicResource primary}" HorizontalAlignment="Center" FontWeight="SemiBold" />
+              </StackPanel>
+              <TextBlock Text="{Binding Loc[AboutDescription]}"
+                         FontSize="13" Foreground="{DynamicResource onSurfaceVariant}"
+                         TextAlignment="Center" TextWrapping="Wrap" MaxWidth="480" />
+              <TextBlock Text="{Binding Loc[AboutProtocols]}"
+                         FontSize="12" Foreground="{DynamicResource outline}"
+                         TextAlignment="Center" TextWrapping="Wrap" MaxWidth="480" />
+              <Border Height="1" Background="{DynamicResource outlineVariant}" Margin="0,4" />
+              <StackPanel Spacing="6" HorizontalAlignment="Center">
+                <TextBlock Text="{Binding Loc[AboutCreator]}" FontSize="12.5"
+                           Foreground="{DynamicResource onSurfaceVariant}" HorizontalAlignment="Center" />
+                <Button Command="{Binding OpenGitHubUrlCommand}"
+                        Background="Transparent" BorderThickness="0" Padding="0" Cursor="Hand"
+                        HorizontalAlignment="Center">
+                  <TextBlock Text="GitHub: @pronibgr" Foreground="#0284c7"
+                             TextDecorations="Underline" FontSize="15" FontWeight="Bold" />
+                </Button>
+              </StackPanel>
+            </StackPanel>
+          </Border>
+        </Border>
+
+      </Grid>
+    </Grid>
+
+    <!-- ======================================================================= -->
+    <!-- 2. SMARTPHONE LAYOUT (Screen Width < 720dp)                             -->
+    <!-- No sidebar! Top bar with Gear (left) and + (right).                     -->
+    <!-- Central Power Card + Connection Time badge + Subscriptions list         -->
+    <!-- ======================================================================= -->
+    <Grid RowDefinitions="Auto,*" Background="{DynamicResource surface}"
+          IsVisible="{Binding IsPhoneMode}">
+
+      <!-- SMARTPHONE TOP BAR -->
+      <Border Grid.Row="0"
+              Background="{DynamicResource surfaceContainer}"
+              BorderBrush="{DynamicResource outlineVariant}"
+              BorderThickness="0,0,0,1"
+              Padding="14,10"
+              ZIndex="10">
+        <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+
+          <!-- Left: Settings Gear Button -->
+          <Button Grid.Column="0"
+                  Command="{Binding SelectDestinationCommand}" CommandParameter="1"
+                  Classes="m3-icon-button" Width="44" Height="44"
+                  ToolTip.Tip="{Binding Loc[NavSettings]}">
+            <PathIcon Data="{StaticResource IconSettings}" Width="22" Height="22"
+                      Foreground="{DynamicResource onSurface}" />
+          </Button>
+
+          <!-- Center: Title -->
+          <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="lumen aura" FontSize="18" FontWeight="Bold"
+                       Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+            <Border Width="8" Height="8" CornerRadius="4"
+                    Background="{DynamicResource primary}"
+                    IsVisible="{Binding Engine.IsConnected}" VerticalAlignment="Center" />
+          </StackPanel>
+
+          <!-- Right: Add Subscription Button (+) -->
+          <Button Grid.Column="2"
+                  Command="{Binding OpenAddDialogCommand}"
+                  Classes="m3-icon-button" Width="44" Height="44"
+                  ToolTip.Tip="{Binding Loc[AddSubscription]}">
+            <Border Width="38" Height="38" CornerRadius="19"
+                    Background="{DynamicResource addNavBackground}">
+              <PathIcon Data="{StaticResource IconPlus}" Width="18" Height="18"
+                        Foreground="{DynamicResource onSecondaryContainer}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+          </Button>
+
+        </Grid>
+      </Border>
+
+      <!-- SMARTPHONE MAIN CONTENT (DASHBOARD & SUBSCRIPTIONS) -->
+      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto"
+                    IsVisible="{Binding !IsSettingsActive}">
+        <StackPanel Spacing="16" Margin="16,14,16,24">
+
+          <!-- 1. BIG ROUNDED CONNECTION CARD (per user sketch) -->
+          <Border Background="{DynamicResource surfaceContainerLow}"
+                  BorderBrush="{DynamicResource outlineVariant}"
+                  BorderThickness="1"
+                  CornerRadius="28" Padding="20,24">
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
+
+              <!-- Big Expressive Power Button -->
+              <Grid HorizontalAlignment="Center" Width="150" Height="150">
+                <Border Width="148" Height="148" CornerRadius="999"
+                        BorderThickness="2"
+                        BorderBrush="{DynamicResource primaryContainer}" />
+
+                <Border Width="130" Height="130" CornerRadius="999"
+                        BorderThickness="1.5"
+                        BorderBrush="{DynamicResource secondaryContainer}" />
+
+                <Button Command="{Binding DashboardVM.ToggleConnectionAsync}"
+                        Width="112" Height="112" CornerRadius="999"
+                        HorizontalAlignment="Center" VerticalAlignment="Center"
+                        BorderThickness="0" Cursor="Hand">
+                  <Button.Styles>
+                    <Style Selector="Button">
+                      <Setter Property="Background" Value="{DynamicResource primary}" />
+                      <Setter Property="RenderTransform" Value="scale(1)" />
+                      <Setter Property="Transitions">
+                        <Transitions>
+                          <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                          <BrushTransition Property="Background" Duration="0:0:0.25" />
+                        </Transitions>
+                      </Setter>
+                    </Style>
+                    <Style Selector="Button:pointerover">
+                      <Setter Property="Opacity" Value="0.92" />
+                      <Setter Property="RenderTransform" Value="scale(1.05)" />
+                    </Style>
+                    <Style Selector="Button:pressed">
+                      <Setter Property="RenderTransform" Value="scale(0.95)" />
+                    </Style>
+                  </Button.Styles>
+
+                  <PathIcon Data="{StaticResource IconPower}" Width="40" Height="40"
+                            Foreground="{DynamicResource onPrimary}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </Button>
+              </Grid>
+
+              <!-- Status text (bold: disconnected / connected) -->
+              <TextBlock Text="{Binding Engine.StatusText}"
+                         FontSize="22" FontWeight="Bold"
+                         Foreground="{DynamicResource onSurface}"
+                         HorizontalAlignment="Center" />
+
+            </StackPanel>
+          </Border>
+
+          <!-- 2. CONNECTION TIME CARD: (Clock icon) Connection time: 00:00:00 (per sketch) -->
+          <Border Background="{DynamicResource surfaceContainerHigh}"
+                  BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+                  CornerRadius="20" Padding="18,10" HorizontalAlignment="Center">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconTimer}" Width="16" Height="16" Foreground="{DynamicResource primary}" />
+              <TextBlock Text="{Binding Loc[Duration]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="12.5" VerticalAlignment="Center" />
+              <TextBlock Text="{Binding Engine.ConnectionDuration}"
+                         Foreground="{DynamicResource onSurface}" FontSize="15" FontWeight="Bold"
+                         FontFamily="Monospace" VerticalAlignment="Center" />
+            </StackPanel>
+          </Border>
+
+          <!-- Telemetry counters (compact for phone) -->
+          <Grid ColumnDefinitions="*,*,*">
+            <Border Grid.Column="0" Classes="m3-card" CornerRadius="16" Margin="0,0,4,0" Padding="10,8">
+              <StackPanel Spacing="2" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                  <PathIcon Data="{StaticResource IconArrowDown}" Width="12" Height="12" Foreground="{DynamicResource primary}" />
+                  <TextBlock Text="DL" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource onSurfaceVariant}" />
+                </StackPanel>
+                <TextBlock Text="{Binding Engine.DownloadSpeed}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1" Classes="m3-card" CornerRadius="16" Margin="2,0,2,0" Padding="10,8">
+              <StackPanel Spacing="2" HorizontalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                  <PathIcon Data="{StaticResource IconArrowUp}" Width="12" Height="12" Foreground="{DynamicResource primary}" />
+                  <TextBlock Text="UL" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource onSurfaceVariant}" />
+                </StackPanel>
+                <TextBlock Text="{Binding Engine.UploadSpeed}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              </StackPanel>
+            </Border>
+
+            <Border Grid.Column="2" Classes="m3-card" CornerRadius="16" Margin="4,0,0,0" Padding="10,8">
+              <StackPanel Spacing="2" HorizontalAlignment="Center">
+                <TextBlock Text="Data" FontSize="10" FontWeight="Bold" Foreground="{DynamicResource onSurfaceVariant}" />
+                <TextBlock Text="{Binding Engine.TotalTransferred}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              </StackPanel>
+            </Border>
+          </Grid>
+
+          <!-- 3. SUBSCRIPTIONS SECTION (per sketch) -->
+          <views:SubscriptionsView DataContext="{Binding SubscriptionsVM}" />
+
+        </StackPanel>
+      </ScrollViewer>
+
+      <!-- SMARTPHONE SETTINGS VIEW OVERLAY (Smooth Slide In & Out from Left to Right) -->
+      <Border Grid.Row="1"
+              Background="{DynamicResource surface}"
+              Classes="mobile-settings-drawer"
+              Classes.open="{Binding IsSettingsActive}"
+              ZIndex="50">
+        <views:SettingsView DataContext="{Binding SettingsVM}" />
+      </Border>
+
+    </Grid>
+
+    <!-- ======================================================================= -->
+    <!-- 3. SHARED MODAL DIALOGS: ADD SUBSCRIPTION & ADD APPLICATION             -->
+    <!-- ======================================================================= -->
+
+    <!-- ADD SUBSCRIPTION MODAL -->
+    <Border Background="#7F000000"
+            ZIndex="1000"
+            Classes="modal-backdrop"
+            Classes.open="{Binding SubscriptionsVM.IsAddDialogOpen}"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+      <Border Classes="m3-card-elevated modal-card"
+              Classes.open="{Binding SubscriptionsVM.IsAddDialogOpen}"
+              CornerRadius="28"
+              MaxWidth="440" MaxHeight="620"
+              HorizontalAlignment="Stretch" VerticalAlignment="Center"
+              Margin="16" Padding="22">
+
+        <ScrollViewer VerticalScrollBarVisibility="Auto" MaxHeight="560">
+          <StackPanel Spacing="16">
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AddModalTitle]}"
+                         FontSize="18" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              <Button Grid.Column="1" Command="{Binding SubscriptionsVM.CloseAddDialogCommand}"
+                      Classes="m3-icon-button" Width="32" Height="32" ToolTip.Tip="Close">
+                <TextBlock Text="✕" FontSize="14" Foreground="{DynamicResource onSurfaceVariant}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Button>
+            </Grid>
+
+            <!-- Type Selection: Subscription / JSON -->
+            <Border Background="{DynamicResource surfaceContainerHigh}" CornerRadius="14" Padding="4">
+              <Grid ColumnDefinitions="*,*">
+                <Button Grid.Column="0" Command="{Binding SubscriptionsVM.SelectImportTypeCommand}" CommandParameter="0"
+                        Classes="transparent-card-btn" CornerRadius="10">
+                  <Border CornerRadius="10" Padding="8,6"
+                          Background="{Binding SubscriptionsVM.IsImportTypeSubscription, Converter={x:Static ObjectConverters.IsNotNull}}">
+                    <TextBlock Text="{Binding Loc[NavSubscriptions]}" FontSize="12.5" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Foreground="{DynamicResource onSurface}" />
+                  </Border>
+                </Button>
+
+                <Button Grid.Column="1" Command="{Binding SubscriptionsVM.SelectImportTypeCommand}" CommandParameter="1"
+                        Classes="transparent-card-btn" CornerRadius="10">
+                  <Border CornerRadius="10" Padding="8,6">
+                    <TextBlock Text="JSON / AmneziaWG" FontSize="12.5" FontWeight="SemiBold"
+                               HorizontalAlignment="Center" Foreground="{DynamicResource onSurface}" />
+                  </Border>
+                </Button>
+              </Grid>
+            </Border>
+
+            <!-- Subscription inputs -->
+            <StackPanel Spacing="10" IsVisible="{Binding SubscriptionsVM.IsImportTypeSubscription}">
+              <TextBox Text="{Binding SubscriptionsVM.NewSubName, Mode=TwoWay}"
+                       PlaceholderText="Subscription Name (optional)" />
+              <TextBox Text="{Binding SubscriptionsVM.NewSubUrl, Mode=TwoWay}"
+                       PlaceholderText="Subscription URL (https://... or vless://...)"
+                       AcceptsReturn="True" Height="90" TextWrapping="Wrap" />
+              <Button Command="{Binding SubscriptionsVM.ConfirmAddSubscriptionCommand}"
+                      Classes="m3-filled-button" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                      Content="{Binding Loc[Save]}" />
+            </StackPanel>
+
+            <!-- JSON / Config inputs -->
+            <StackPanel Spacing="10" IsVisible="{Binding SubscriptionsVM.IsImportTypeJson}">
+              <TextBox Text="{Binding SubscriptionsVM.NewSubName, Mode=TwoWay}"
+                       PlaceholderText="Config Name (optional)" />
+              <Button Command="{Binding SubscriptionsVM.UploadAwgConfigFileCommand}"
+                      Classes="m3-tonal-button" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                      Content="Upload .conf file" />
+              <TextBox Text="{Binding SubscriptionsVM.RawConfigInput, Mode=TwoWay}"
+                       PlaceholderText="Paste full JSON or WireGuard config..."
+                       AcceptsReturn="True" Height="120" TextWrapping="Wrap" />
+              <Button Command="{Binding SubscriptionsVM.ConfirmImportJsonCommand}"
+                      Classes="m3-filled-button" HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"
+                      Content="{Binding Loc[Save]}" />
+            </StackPanel>
+          </StackPanel>
+        </ScrollViewer>
+      </Border>
+    </Border>
+
+    <!-- ADD APPLICATION MODAL (Split Tunneling) -->
+    <Border Background="#7F000000"
+            ZIndex="1000"
+            Classes="modal-backdrop"
+            Classes.open="{Binding RoutingVM.IsAddAppDialogOpen}"
+            HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+      <Border Classes="m3-card-elevated modal-card"
+              Classes.open="{Binding RoutingVM.IsAddAppDialogOpen}"
+              CornerRadius="28" MaxWidth="440" MaxHeight="560"
+              HorizontalAlignment="Stretch" VerticalAlignment="Center"
+              Margin="16" Padding="22">
+        <Grid RowDefinitions="Auto,Auto,*,Auto">
+          <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,0,0,12" VerticalAlignment="Center">
+            <TextBlock Grid.Column="0" Text="{Binding Loc[AddApplication]}" FontSize="18" FontWeight="Bold"
+                       Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+            <Button Grid.Column="1" Command="{Binding RoutingVM.CloseAddAppDialogCommand}"
+                    Classes="m3-icon-button" Width="32" Height="32" ToolTip.Tip="Close">
+              <TextBlock Text="✕" FontSize="14" Foreground="{DynamicResource onSurfaceVariant}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+          </Grid>
+
+          <!-- Search box & Show System Apps toggle -->
+          <StackPanel Grid.Row="1" Spacing="8" Margin="0,0,0,12">
+            <TextBox Text="{Binding RoutingVM.SearchAppText, Mode=TwoWay}"
+                     PlaceholderText="Search applications..." />
+            <CheckBox IsChecked="{Binding RoutingVM.ShowSystemApps, Mode=TwoWay}"
+                      Content="{Binding Loc[ShowSystemApps]}"
+                      FontSize="12" Foreground="{DynamicResource onSurfaceVariant}" />
+          </StackPanel>
+
+          <!-- Available Applications list -->
+          <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" MaxHeight="270">
+            <ItemsControl ItemsSource="{Binding RoutingVM.AvailableApplications}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate DataType="models:ProcessItem">
+                  <Button Command="{Binding $parent[UserControl].((vm:MainViewModel)DataContext).RoutingVM.AddApplicationCommand}"
+                          CommandParameter="{Binding}"
+                          Classes="transparent-card-btn" Margin="0,2">
+                    <Border CornerRadius="12" Padding="10,8" Background="{DynamicResource surfaceContainerHigh}">
+                      <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                        <TextBlock Grid.Column="0" Text="📦" FontSize="14" Margin="0,0,10,0" VerticalAlignment="Center" />
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                          <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="12.5" Foreground="{DynamicResource onSurface}" />
+                          <TextBlock Text="{Binding Category}" FontSize="10.5" Foreground="{DynamicResource onSurfaceVariant}" />
+                        </StackPanel>
+                        <PathIcon Grid.Column="2" Data="{StaticResource IconPlus}" Width="12" Height="12" Foreground="{DynamicResource primary}" />
+                      </Grid>
+                    </Border>
+                  </Button>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </ScrollViewer>
+
+          <!-- Custom name input -->
+          <Grid Grid.Row="3" ColumnDefinitions="*,Auto" Margin="0,14,0,0">
+            <TextBox Grid.Column="0" Text="{Binding RoutingVM.CustomAppName, Mode=TwoWay}"
+                     PlaceholderText="Or enter package name..." Margin="0,0,8,0" />
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6">
+              <Button Command="{Binding RoutingVM.AddCustomApplicationCommand}"
+                      Classes="m3-filled-button" CornerRadius="14" Content="Add" />
+              <Button Command="{Binding RoutingVM.CloseAddAppDialogCommand}"
+                      Classes="m3-outlined-button" CornerRadius="14" Content="Close" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </Border>
+    </Border>
+
+    <!-- FLOATING TOAST NOTIFICATION -->
+    <Border Background="{DynamicResource onSurface}"
+            BorderBrush="{DynamicResource outline}" BorderThickness="1"
+            CornerRadius="24" Padding="18,10"
+            HorizontalAlignment="Center" VerticalAlignment="Bottom"
+            Margin="0,0,0,32"
+            IsHitTestVisible="False"
+            ZIndex="2000"
+            IsVisible="{Binding Toast.IsVisible}">
+      <Border.Transitions>
+        <Transitions>
+          <DoubleTransition Property="Opacity" Duration="0:0:0.25" />
+        </Transitions>
+      </Border.Transitions>
+      <TextBlock Text="{Binding Toast.Message}" Foreground="{DynamicResource surface}"
+                 FontSize="13" FontWeight="SemiBold" HorizontalAlignment="Center" />
+    </Border>
+
+  </Grid>
+</UserControl>

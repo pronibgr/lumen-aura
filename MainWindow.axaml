@@ -1,0 +1,30 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="using:aura.ViewModels"
+        xmlns:views="using:aura.Views"
+        mc:Ignorable="d" d:DesignWidth="1240" d:DesignHeight="820"
+        Width="1240" Height="820"
+        MinWidth="380" MinHeight="500"
+        WindowStartupLocation="CenterScreen"
+        x:Class="aura.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="lumen aura"
+        Background="{DynamicResource surface}">
+
+  <!-- KeyBindings (Ctrl+R for logs report) -->
+  <Window.KeyBindings>
+    <KeyBinding Gesture="Ctrl+R" Command="{Binding LogsVM.GenerateReportCommand}" />
+  </Window.KeyBindings>
+
+  <!-- Smooth Theme Transitions -->
+  <Window.Transitions>
+    <Transitions>
+      <BrushTransition Property="Background" Duration="0:0:0.25" />
+    </Transitions>
+  </Window.Transitions>
+
+  <views:MainAdaptiveView />
+
+</Window>

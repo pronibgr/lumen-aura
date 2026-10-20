@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0-android</TargetFramework>
+    <SupportedOSPlatformVersion>26</SupportedOSPlatformVersion>
+    <Nullable>enable</Nullable>
+    <ApplicationId>com.lumen.aura</ApplicationId>
+    <ApplicationVersion>1</ApplicationVersion>
+    <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
+    <AndroidPackageFormat>apk</AndroidPackageFormat>
+    <AndroidEnableProfiledAot>false</AndroidEnableProfiledAot>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSdkDirectory Condition="'$(AndroidSdkDirectory)' == '' and Exists('/opt/android-sdk')">/opt/android-sdk</AndroidSdkDirectory>
+    <JavaSdkDirectory Condition="'$(JavaSdkDirectory)' == '' and Exists('/usr/lib/jvm/java-17-openjdk')">/usr/lib/jvm/java-17-openjdk</JavaSdkDirectory>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Android" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.4" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Xamarin.AndroidX.Core" Version="1.17.0.2" />
+    <PackageReference Include="Xamarin.AndroidX.AppCompat" Version="1.7.1.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AndroidNativeLibrary Include="lib\arm64-v8a\libxray.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="lib\arm64-v8a\libtun2socks.so" Abi="arm64-v8a" />
+    <AndroidNativeLibrary Include="lib\x86_64\libxray.so" Abi="x86_64" />
+    <AndroidNativeLibrary Include="lib\x86_64\libtun2socks.so" Abi="x86_64" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <AndroidAsset Include="Assets\**\*" />
+  </ItemGroup>
+
+  <!-- Include shared core files from parent aura directory -->
+  <ItemGroup>
+    <Compile Include="..\Models\**\*.cs" Link="Models\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Services\**\*.cs" Link="Services\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\ViewModels\**\*.cs" Link="ViewModels\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Views\**\*.cs" Link="Views\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\App.axaml.cs" Link="App.axaml.cs" />
+
+    <AvaloniaXaml Include="..\App.axaml" Link="App.axaml" />
+    <AvaloniaXaml Include="..\Styles\**\*.axaml" Link="Styles\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AvaloniaXaml Include="..\Views\**\*.axaml" Link="Views\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AvaloniaResource Include="..\Assets\**\*" Link="Assets\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

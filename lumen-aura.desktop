@@ -1,0 +1,11 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=lumen aura
+GenericName=VPN and Proxy Client
+Comment=Universal cross-platform VPN and proxy client
+Exec=/usr/bin/lumen-aura %u
+Icon=lumen-aura
+Terminal=false
+Categories=Utility;Network;VPN;
+StartupWMClass=aura

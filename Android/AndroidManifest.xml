@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.lumen.aura"
+          android:versionCode="1"
+          android:versionName="1.0.0">
+
+  <!-- Android 8.0 (API 26) Minimum SDK Support, API 36 Target SDK -->
+  <uses-sdk android:minSdkVersion="26" android:targetSdkVersion="36" />
+
+  <!-- Core Network & VPN Permissions -->
+  <uses-permission android:name="android.permission.INTERNET" />
+  <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+  <!-- Permission to query all installed packages for split-tunneling on Android 11+ -->
+  <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
+
+  <application android:label="lumen aura"
+               android:icon="@drawable/icon"
+               android:roundIcon="@drawable/icon"
+               android:networkSecurityConfig="@xml/network_security_config"
+               android:allowBackup="true"
+               android:supportsRtl="true"
+               android:extractNativeLibs="true">
+
+    <!-- Splash Activity / Launcher -->
+    <activity android:name="aura.Android.SplashActivity"
+              android:theme="@style/MyTheme.Splash"
+              android:noHistory="true"
+              android:exported="true">
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+      </intent-filter>
+    </activity>
+
+    <!-- Main Activity -->
+    <activity android:name="aura.Android.MainActivity"
+              android:label="lumen aura"
+              android:theme="@style/MyTheme.NoActionBar"
+              android:exported="true"
+              android:launchMode="singleTop"
+              android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+              android:windowSoftInputMode="adjustResize" />
+
+    <!-- Native VPN Service -->
+    <service android:name="aura.Android.AuraVpnService"
+             android:permission="android.permission.BIND_VPN_SERVICE"
+             android:exported="false"
+             android:foregroundServiceType="specialUse">
+      <intent-filter>
+        <action android:name="android.net.VpnService" />
+      </intent-filter>
+      <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="VPN Tunnel" />
+    </service>
+
+  </application>
+
+</manifest>

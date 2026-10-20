@@ -1,0 +1,107 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="aura.App"
+             RequestedThemeVariant="Light">
+
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="/Styles/Icons.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+
+      <ResourceDictionary.ThemeDictionaries>
+        <!-- Calcite (Cool Light): Crisp, cold white with refined jade accent -->
+        <ResourceDictionary x:Key="Light">
+          <!-- Surfaces -->
+          <SolidColorBrush x:Key="surface" Color="#F7F9FB" />
+          <SolidColorBrush x:Key="surfaceContainer" Color="#EEF2F5" />
+          <SolidColorBrush x:Key="surfaceContainerLow" Color="#E5EAEF" />
+          <SolidColorBrush x:Key="surfaceContainerHigh" Color="#DCE2E8" />
+          <SolidColorBrush x:Key="surfaceContainerHighest" Color="#FFFFFF" />
+
+          <!-- On Surfaces -->
+          <SolidColorBrush x:Key="onSurface" Color="#161C20" />
+          <SolidColorBrush x:Key="onSurfaceVariant" Color="#5C6B73" />
+
+          <!-- Primary Roles (Accent: pine-jade preserved) -->
+          <SolidColorBrush x:Key="primary" Color="#3B685C" />
+          <SolidColorBrush x:Key="onPrimary" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="primaryContainer" Color="#D7ECE6" />
+          <SolidColorBrush x:Key="onPrimaryContainer" Color="#0E2922" />
+
+          <!-- Secondary Roles (AccentDim) -->
+          <SolidColorBrush x:Key="secondary" Color="#294941" />
+          <SolidColorBrush x:Key="onSecondary" Color="#FFFFFF" />
+          <SolidColorBrush x:Key="secondaryContainer" Color="#E5EAEF" />
+          <SolidColorBrush x:Key="onSecondaryContainer" Color="#161C20" />
+
+          <!-- Add Nav Button Special Tint -->
+          <SolidColorBrush x:Key="addNavBackground" Color="#E2EBE7" />
+          <SolidColorBrush x:Key="addNavIconBackground" Color="#D3E0DC" />
+
+          <!-- Errors / Danger -->
+          <SolidColorBrush x:Key="error" Color="#D14354" />
+          <SolidColorBrush x:Key="errorContainer" Color="#FCE8EA" />
+          <SolidColorBrush x:Key="onErrorContainer" Color="#5C1D24" />
+
+          <!-- Outlines & Borders (Border / Focus) -->
+          <SolidColorBrush x:Key="outline" Color="#829790" />
+          <SolidColorBrush x:Key="outlineVariant" Color="#D6DDE4" />
+
+          <!-- Interactive State Overlays -->
+          <SolidColorBrush x:Key="stateLayerHover" Color="#0E161C20" />
+          <SolidColorBrush x:Key="stateLayerPressed" Color="#1E161C20" />
+        </ResourceDictionary>
+
+        <!-- Noctiluca: Deep oceanic teal darkness with cold bioluminescent glow (Dark) -->
+        <ResourceDictionary x:Key="Dark">
+          <!-- Surfaces -->
+          <SolidColorBrush x:Key="surface" Color="#0C1214" />
+          <SolidColorBrush x:Key="surfaceContainer" Color="#141D22" />
+          <SolidColorBrush x:Key="surfaceContainerLow" Color="#19252C" />
+          <SolidColorBrush x:Key="surfaceContainerHigh" Color="#22323B" />
+          <SolidColorBrush x:Key="surfaceContainerHighest" Color="#152026" />
+
+          <!-- On Surfaces -->
+          <SolidColorBrush x:Key="onSurface" Color="#E1ECF0" />
+          <SolidColorBrush x:Key="onSurfaceVariant" Color="#6E8590" />
+
+          <!-- Primary Roles (Accent: bioluminescent phosphor glow) -->
+          <SolidColorBrush x:Key="primary" Color="#6CE5B9" />
+          <SolidColorBrush x:Key="onPrimary" Color="#0C1214" />
+          <SolidColorBrush x:Key="primaryContainer" Color="#1E4237" />
+          <SolidColorBrush x:Key="onPrimaryContainer" Color="#6CE5B9" />
+
+          <!-- Secondary Roles (AccentDim) -->
+          <SolidColorBrush x:Key="secondary" Color="#2A624E" />
+          <SolidColorBrush x:Key="onSecondary" Color="#E1ECF0" />
+          <SolidColorBrush x:Key="secondaryContainer" Color="#19252C" />
+          <SolidColorBrush x:Key="onSecondaryContainer" Color="#E1ECF0" />
+
+          <!-- Add Nav Button Special Tint -->
+          <SolidColorBrush x:Key="addNavBackground" Color="#19252C" />
+          <SolidColorBrush x:Key="addNavIconBackground" Color="#22323B" />
+
+          <!-- Errors / Danger -->
+          <SolidColorBrush x:Key="error" Color="#E05060" />
+          <SolidColorBrush x:Key="errorContainer" Color="#4A181D" />
+          <SolidColorBrush x:Key="onErrorContainer" Color="#FFDADB" />
+
+          <!-- Outlines & Borders (Border / Focus) -->
+          <SolidColorBrush x:Key="outline" Color="#3B5462" />
+          <SolidColorBrush x:Key="outlineVariant" Color="#24333B" />
+
+          <!-- Interactive State Overlays -->
+          <SolidColorBrush x:Key="stateLayerHover" Color="#14E1ECF0" />
+          <SolidColorBrush x:Key="stateLayerPressed" Color="#24E1ECF0" />
+        </ResourceDictionary>
+      </ResourceDictionary.ThemeDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+
+  <Application.Styles>
+    <FluentTheme />
+    <StyleInclude Source="/Styles/AppStyles.axaml" />
+  </Application.Styles>
+
+</Application>

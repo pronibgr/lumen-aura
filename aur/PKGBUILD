@@ -1,0 +1,71 @@
+# Maintainer: lumen aura Team
+pkgname=lumen-aura
+pkgver=1.0
+pkgrel=1
+pkgdesc="Universal cross-platform VPN and proxy client in Material 3 Expressive design"
+arch=('x86_64')
+url="https://github.com/lumen-aura/aura"
+license=('MIT')
+depends=(
+    'dotnet-runtime'
+    'fontconfig'
+    'libx11'
+    'libice'
+    'libsm'
+    'libxcursor'
+    'libxext'
+    'libxi'
+    'libxrandr'
+)
+makedepends=(
+    'dotnet-sdk>=8.0'
+)
+options=('!strip')
+source=(
+    "lumen-aura.desktop"
+    "lumen-aura.sh"
+    "aura.png"
+    "LICENSE"
+)
+sha256sums=(
+    '558b1b07276ac9f86a534e5527db94f277b6425178588b8be1270f799e41eb50'
+    '81789577d0e369284af5717cbfa464f4d8bd19009b36cba6674d7352880efb5c'
+    '7d21f8d3e88b55c4336aed240d518a09e458e34ce6953efa76f9b0c220b77233'
+    '12c04baa22d508f53175a9b5f06cf61fbd5a4ab8e1fc5e722d006084a73ce64c'
+)
+
+build() {
+    local _proj_dir="$startdir/.."
+    if [ ! -f "$_proj_dir/aura.csproj" ]; then
+        _proj_dir="$srcdir"
+    fi
+
+    dotnet publish "$_proj_dir/aura.csproj" \
+        -c Release \
+        -r linux-x64 \
+        --self-contained false \
+        -o "$srcdir/publish"
+}
+
+package() {
+    # Application runtime files in /opt/lumen-aura
+    install -d "$pkgdir/opt/lumen-aura"
+    cp -r "$srcdir/publish/"* "$pkgdir/opt/lumen-aura/"
+    chmod 755 "$pkgdir/opt/lumen-aura/aura"
+
+    # Executable wrapper in /usr/bin
+    install -Dm755 "$srcdir/lumen-aura.sh" "$pkgdir/usr/bin/lumen-aura"
+    ln -s lumen-aura "$pkgdir/usr/bin/aura"
+
+    # Desktop entry
+    install -Dm644 "$srcdir/lumen-aura.desktop" "$pkgdir/usr/share/applications/lumen-aura.desktop"
+
+    # Icon files
+    install -Dm644 "$srcdir/aura.png" "$pkgdir/usr/share/icons/hicolor/128x128/apps/lumen-aura.png"
+    install -Dm644 "$srcdir/aura.png" "$pkgdir/usr/share/pixmaps/lumen-aura.png"
+    install -Dm644 "$srcdir/aura.png" "$pkgdir/usr/share/icons/hicolor/128x128/apps/aura.png"
+    install -Dm644 "$srcdir/aura.png" "$pkgdir/usr/share/pixmaps/aura.png"
+
+    # License
+    install -Dm644 "$srcdir/LICENSE" "$pkgdir/usr/share/licenses/$pkgname/LICENSE"
+}

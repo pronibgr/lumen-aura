@@ -1,0 +1,530 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             xmlns:views="using:aura.Views"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="850"
+             x:Class="aura.Views.SettingsView"
+             x:DataType="vm:SettingsViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="20" Margin="24,18">
+
+      <!-- Header with Back Button & Submenu Navigation Pills -->
+      <StackPanel Spacing="14">
+        <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+          <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+            <!-- Back to Main Button with smooth physical animation -->
+            <Button Command="{Binding BackToMainCommand}"
+                    Classes="m3-icon-button" Width="40" Height="40"
+                    ToolTip.Tip="{Binding Loc[BackToMain]}">
+              <PathIcon Data="{StaticResource IconArrowLeft}" Width="20" Height="20"
+                        Foreground="{DynamicResource onSurface}" />
+            </Button>
+            <TextBlock Text="{Binding Loc[SettingsTitle]}"
+                       FontSize="22" FontWeight="Bold" Foreground="{DynamicResource onSurface}"
+                       VerticalAlignment="Center" />
+          </StackPanel>
+        </Grid>
+
+        <!-- Submenu Navigation Buttons (M3 Pills) -->
+        <Border Background="{DynamicResource surfaceContainerHigh}"
+                CornerRadius="16" Padding="6">
+          <WrapPanel Orientation="Horizontal">
+            <!-- 0: General -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="0"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsGeneralActive}" />
+                  <TextBlock Text="{Binding Loc[SettingsGeneral]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsGeneralActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[SettingsGeneral]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsGeneralActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 1: Routing -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="1"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsRoutingActive}" />
+                  <TextBlock Text="{Binding Loc[NavRouting]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsRoutingActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[NavRouting]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsRoutingActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 2: Advanced -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="2"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsAdvancedActive}" />
+                  <TextBlock Text="{Binding Loc[SettingsAdvanced]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsAdvancedActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[SettingsAdvanced]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsAdvancedActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 3: Subscriptions -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="3"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsSubscriptionsActive}" />
+                  <TextBlock Text="{Binding Loc[SettingsSubscriptions]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsSubscriptionsActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[SettingsSubscriptions]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsSubscriptionsActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 4: Ping -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="4"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsPingActive}" />
+                  <TextBlock Text="{Binding Loc[SettingsPing]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsPingActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[SettingsPing]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsPingActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 5: Network & Ports -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="5"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsNetworkActive}" />
+                  <TextBlock Text="{Binding Loc[SettingsNetwork]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsNetworkActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[SettingsNetwork]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsNetworkActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 6: Logs (Dedicated tab on smartphones) -->
+            <Button Command="{Binding SelectSubMenuCommand}" CommandParameter="6"
+                    Classes="transparent-card-btn" CornerRadius="12" Margin="2"
+                    IsVisible="{Binding IsPhoneMode}">
+              <Border CornerRadius="12" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="12" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsLogsActive}" />
+                  <TextBlock Text="{Binding Loc[NavLogs]}" FontWeight="SemiBold" FontSize="12.5"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsLogsActive}" HorizontalAlignment="Center" Margin="6,0" />
+                  <TextBlock Text="{Binding Loc[NavLogs]}" FontWeight="Medium" FontSize="12.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsLogsActive}" HorizontalAlignment="Center" Margin="6,0" />
+                </Grid>
+              </Border>
+            </Button>
+          </WrapPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 0: GENERAL (ACTIVE BY DEFAULT) ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsGeneralActive}">
+        <Border Classes="m3-card" CornerRadius="20" Padding="20">
+          <StackPanel Spacing="16">
+            <TextBlock Text="{Binding Loc[SettingsGeneral]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+
+            <!-- 1. Language -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsLanguage]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsLanguageSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding AvailableLanguages}"
+                        SelectedItem="{Binding SelectedLanguageDisplay, Mode=TwoWay}"
+                        Width="160" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 1.1 Theme Selection (Light / Dark) -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsTheme]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsThemeSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding AvailableThemes}"
+                        SelectedIndex="{Binding SelectedThemeIndex, Mode=TwoWay}"
+                        Width="180" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 1.2 Speed Measurement Units (Bytes / Bits) -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SpeedUnit]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SpeedUnitSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding AvailableSpeedUnits}"
+                        SelectedIndex="{Binding SelectedSpeedUnitIndex, Mode=TwoWay}"
+                        Width="180" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 2. Connection User-Agent -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsUserAgent]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsUserAgentSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding AvailableUserAgents}"
+                        SelectedItem="{Binding Settings.ConnectionUserAgent, Mode=TwoWay}"
+                        Width="220" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 3. Fragmentation -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsFragmentation]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsFragmentationSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.EnableFragmentation, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <!-- Fragmentation sub-parameters if enabled -->
+            <Border Background="{DynamicResource surfaceContainerHighest}" CornerRadius="12" Padding="14"
+                    IsVisible="{Binding Settings.EnableFragmentation}">
+              <Grid ColumnDefinitions="*,*,*">
+                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                  <TextBlock Text="Length" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                  <TextBox Text="{Binding Settings.FragLength, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Spacing="4" Margin="4,0,4,0">
+                  <TextBlock Text="Interval ms" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                  <TextBox Text="{Binding Settings.FragInterval, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Grid.Column="2" Spacing="4" Margin="8,0,0,0">
+                  <TextBlock Text="Packets" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                  <TextBox Text="{Binding Settings.FragPackets, Mode=TwoWay}" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 4. Multiplexer (MUX) -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsMultiplexer]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsMultiplexerSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.EnableMultiplexer, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <!-- Mux sub-parameters if enabled -->
+            <Border Background="{DynamicResource surfaceContainerHighest}" CornerRadius="12" Padding="14"
+                    IsVisible="{Binding Settings.EnableMultiplexer}">
+              <Grid ColumnDefinitions="*,*">
+                <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                  <TextBlock Text="Concurrency" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                  <TextBox Text="{Binding Settings.MuxConcurrency, Mode=TwoWay}" />
+                </StackPanel>
+                <StackPanel Grid.Column="1" Spacing="4" Margin="8,0,0,0">
+                  <TextBlock Text="MUX Protocol" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                  <TextBox Text="{Binding Settings.MuxProtocol, Mode=TwoWay}" />
+                </StackPanel>
+              </Grid>
+            </Border>
+
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 1: ROUTING (INTEGRATED) ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsRoutingActive}">
+        <views:RoutingView DataContext="{Binding RoutingVM}" />
+      </StackPanel>
+
+      <!-- ================= SECTION 2: ADVANCED ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsAdvancedActive}">
+        <Border Classes="m3-card" CornerRadius="20" Padding="20">
+          <StackPanel Spacing="14">
+            <TextBlock Text="{Binding Loc[SettingsAdvanced]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+
+            <!-- 1. Use local DNS -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvLocalDns]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.UseLocalDns, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 2. DNS leak protection -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvDnsLeak]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.DnsLeakProtection, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 3. Packet analysis -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvPacketSniffing]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.PacketSniffing, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 4. Auto-start -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvAutoStart]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.AutoStart, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 5. System proxy -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvSystemProxy]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.SystemProxy, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 6. Bypass local addresses -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvBypassLanProxy]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.BypassLanForSystemProxy, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 7. TUN -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvTun]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.TunEnabled, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 8. TUN Provider -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[AdvTunProvider]}"
+                         FontSize="13" FontWeight="Medium" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding TunProviders}"
+                        SelectedItem="{Binding Settings.TunProvider, Mode=TwoWay}"
+                        Width="180" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- 9. Allow LAN connections -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[AdvAllowLan]}"
+                           FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" VerticalAlignment="Center" />
+                <TextBlock Text="{Binding Loc[SettingsAllowLanSub]}"
+                           FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.AllowLanConnections, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <!-- Dynamic Current IP when enabled -->
+            <Border Background="{DynamicResource secondaryContainer}" BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+                    CornerRadius="12" Padding="14,10"
+                    IsVisible="{Binding Settings.AllowLanConnections}">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <PathIcon Data="{StaticResource IconLanguage}" Width="16" Height="16" Foreground="{DynamicResource onSecondaryContainer}" />
+                <TextBlock Text="{Binding Loc[AdvCurrentIp]}" FontWeight="Bold" Foreground="{DynamicResource onSecondaryContainer}" FontSize="13" />
+                <TextBlock Text="{Binding Settings.CurrentLanIp}" FontWeight="Bold" Foreground="{DynamicResource onSecondaryContainer}" FontFamily="Monospace" FontSize="13" />
+                <TextBlock Text="(Port: 2080 Mixed / 10809 HTTP)" FontSize="12" Foreground="{DynamicResource outline}" Margin="8,0,0,0" />
+              </StackPanel>
+            </Border>
+
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 3: SUBSCRIPTIONS AUTOMATION ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsSubscriptionsActive}">
+        <Border Classes="m3-card" CornerRadius="20" Padding="20">
+          <StackPanel Spacing="16">
+            <TextBlock Text="{Binding Loc[SettingsSubscriptions]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SubAutoUpdate]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsAutoUpdateSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.AutoUpdateSubscriptions, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Background="{DynamicResource surfaceContainerHighest}" CornerRadius="12" Padding="14"
+                    IsVisible="{Binding Settings.AutoUpdateSubscriptions}">
+              <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+                <TextBlock Grid.Column="0" Text="{Binding Loc[SubIntervalHours]}" FontSize="13" Foreground="{DynamicResource onSurface}" />
+                <TextBox Grid.Column="1" Text="{Binding Settings.UpdateIntervalHours, Mode=TwoWay}" Width="80" />
+              </Grid>
+            </Border>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[SubNotifications]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.UpdateNotifications, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <TextBlock Grid.Column="0" Text="{Binding Loc[SubTimeoutSec]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+              <TextBox Grid.Column="1" Text="{Binding Settings.RequestTimeoutSeconds, Mode=TwoWay}" Width="80" />
+            </Grid>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 4: PING ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsPingActive}">
+        <Border Classes="m3-card" CornerRadius="20" Padding="20">
+          <StackPanel Spacing="18">
+            <StackPanel Spacing="6">
+              <TextBlock Text="{Binding Loc[PingTypeHeader]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              <TextBlock Text="{Binding Loc[SettingsPingTypeSub]}" FontSize="12" Foreground="{DynamicResource onSurfaceVariant}" />
+            </StackPanel>
+
+            <!-- Radio options for Ping Type -->
+            <StackPanel Spacing="10">
+              <RadioButton Content="via Proxy GET"
+                           IsChecked="{Binding Settings.PingType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='via Proxy GET'}"
+                           Command="{Binding SetPingTypeCommand}" CommandParameter="via Proxy GET" />
+              <RadioButton Content="via Proxy HEAD"
+                           IsChecked="{Binding Settings.PingType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='via Proxy HEAD'}"
+                           Command="{Binding SetPingTypeCommand}" CommandParameter="via Proxy HEAD" />
+              <RadioButton Content="TCP"
+                           IsChecked="{Binding Settings.PingType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='TCP'}"
+                           Command="{Binding SetPingTypeCommand}" CommandParameter="TCP" />
+              <RadioButton Content="ICMP"
+                           IsChecked="{Binding Settings.PingType, Converter={x:Static ObjectConverters.Equal}, ConverterParameter='ICMP'}"
+                           Command="{Binding SetPingTypeCommand}" CommandParameter="ICMP" />
+            </StackPanel>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[PingDisplayMode]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsPingDisplaySub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ComboBox Grid.Column="1"
+                        ItemsSource="{Binding AvailablePingDisplayModes}"
+                        SelectedIndex="{Binding SelectedPingDisplayModeIndex, Mode=TwoWay}"
+                        Width="180" />
+            </Grid>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 5: NETWORK & PORTS ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsNetworkActive}">
+        <Border Classes="m3-card" CornerRadius="20" Padding="20">
+          <StackPanel Spacing="16">
+            <TextBlock Text="{Binding Loc[SettingsNetwork]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+
+            <!-- Kill Switch -->
+            <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+              <StackPanel Grid.Column="0" Spacing="2">
+                <TextBlock Text="{Binding Loc[SettingsKillSwitch]}" FontSize="13" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[SettingsKillSwitchSub]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+              <ToggleSwitch Grid.Column="1"
+                            IsChecked="{Binding Settings.KillSwitch, Mode=TwoWay}"
+                            OnContent="{Binding Loc[On]}" OffContent="{Binding Loc[Off]}" />
+            </Grid>
+
+            <Border Height="1" Background="{DynamicResource outlineVariant}" />
+
+            <!-- Local Ports -->
+            <Grid ColumnDefinitions="*,*,*">
+              <StackPanel Grid.Column="0" Spacing="4" Margin="0,0,8,0">
+                <TextBlock Text="Mixed Port (HTTP+SOCKS)" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                <TextBox Text="{Binding Settings.InboundMixedPort, Mode=TwoWay}" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="4" Margin="4,0,4,0">
+                <TextBlock Text="{Binding Loc[SettingsHttpPort]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                <TextBox Text="{Binding Settings.InboundHttpPort, Mode=TwoWay}" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" Spacing="4" Margin="8,0,0,0">
+                <TextBlock Text="{Binding Loc[SettingsSocksPort]}" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}" />
+                <TextBox Text="{Binding Settings.InboundSocksPort, Mode=TwoWay}" />
+              </StackPanel>
+            </Grid>
+          </StackPanel>
+        </Border>
+      </StackPanel>
+
+      <!-- ================= SECTION 6: LOGS (SMARTPHONES) ================= -->
+      <StackPanel Spacing="16" IsVisible="{Binding IsLogsActive}">
+        <views:LogsView DataContext="{Binding LogsVM}" />
+      </StackPanel>
+
+      <!-- Save Button -->
+      <Button Command="{Binding SaveSettingsCommand}" Classes="m3-filled-button"
+              HorizontalAlignment="Right" Margin="0,8,0,24">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <PathIcon Data="{StaticResource IconCheck}" Width="16" Height="16" Foreground="{DynamicResource onPrimary}" />
+          <TextBlock Text="{Binding Loc[Save]}" />
+        </StackPanel>
+      </Button>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

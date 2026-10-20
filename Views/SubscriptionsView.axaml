@@ -1,0 +1,285 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             xmlns:views="using:aura.Views"
+             xmlns:models="using:aura.Models"
+             mc:Ignorable="d" d:DesignWidth="420" d:DesignHeight="750"
+             x:Class="aura.Views.SubscriptionsView"
+             x:DataType="vm:SubscriptionsViewModel">
+
+  <UserControl.Resources>
+    <!-- Shared Happ-styled Card Template for Subscriptions and JSON Configurations -->
+    <DataTemplate x:Key="SubscriptionCardTemplate" DataType="models:Subscription">
+      <Border Classes="m3-card" CornerRadius="22" Margin="0,0,0,14" Padding="14,14">
+        <StackPanel Spacing="10">
+
+          <!-- 1. HEADER ROW: Chevron, Lightning Icon, Name, Date/AutoUpdate, and Action Buttons -->
+          <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+
+            <!-- Left: Chevron expander, Lightning, Name + Auto-update info -->
+            <Button Grid.Column="0" Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).ToggleExpandSubscriptionCommand}"
+                    CommandParameter="{Binding}"
+                    Classes="transparent-card-btn" Padding="0" Cursor="Hand">
+              <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                <!-- Chevron toggle icon -->
+                <PathIcon Data="{StaticResource IconChevronDown}" Width="12" Height="12"
+                          Foreground="{DynamicResource onSurfaceVariant}"
+                          IsVisible="{Binding IsExpanded}" VerticalAlignment="Center" />
+                <PathIcon Data="{StaticResource IconChevronRight}" Width="12" Height="12"
+                          Foreground="{DynamicResource onSurfaceVariant}"
+                          IsVisible="{Binding !IsExpanded}" VerticalAlignment="Center" />
+
+                <!-- Lightning bolt icon (Happ style) -->
+                <PathIcon Data="{StaticResource IconLightning}" Width="14" Height="14"
+                          Foreground="#f59e0b" VerticalAlignment="Center" />
+
+                <!-- Title and Timestamp -->
+                <StackPanel Spacing="2" VerticalAlignment="Center">
+                  <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding Name}" FontSize="15" FontWeight="Bold"
+                               Foreground="{DynamicResource onSurface}" />
+                    <PathIcon Data="{StaticResource IconPin}" Width="12" Height="12"
+                              Foreground="{DynamicResource primary}"
+                              IsVisible="{Binding IsPinned}" VerticalAlignment="Center" />
+                  </StackPanel>
+                  <TextBlock Text="{Binding AutoUpdateInfo}" FontSize="10.5"
+                             Foreground="{DynamicResource onSurfaceVariant}" />
+                </StackPanel>
+              </StackPanel>
+            </Button>
+
+            <Border Grid.Column="1" />
+
+            <!-- Right: Action Buttons (Refresh, Ping All, 3-dots Menu) -->
+            <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+
+              <!-- Refresh / Update Subscription -->
+              <Button Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).UpdateSubscriptionAsync}"
+                      CommandParameter="{Binding}"
+                      Classes="m3-icon-button" Width="30" Height="30"
+                      ToolTip.Tip="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[UpdateSubscription]}">
+                <PathIcon Data="{StaticResource IconRefresh}" Width="14" Height="14"
+                          Foreground="{DynamicResource onSurfaceVariant}" />
+              </Button>
+
+              <!-- Ping all servers in subscription -->
+              <Button Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).PingAllServersAsync}"
+                      CommandParameter="{Binding}"
+                      Classes="m3-icon-button" Width="30" Height="30"
+                      ToolTip.Tip="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[PingAllServers]}">
+                <PathIcon Data="{StaticResource IconSpeedometer}" Width="14" Height="14"
+                          Foreground="{DynamicResource onSurfaceVariant}" />
+              </Button>
+
+              <!-- Three dots (•••) context flyout -->
+              <Button Classes="m3-icon-button" Width="30" Height="30" ToolTip.Tip="Options">
+                <PathIcon Data="{StaticResource IconMoreHorizontal}" Width="14" Height="14"
+                          Foreground="{DynamicResource onSurfaceVariant}" />
+                <Button.Flyout>
+                  <MenuFlyout Placement="BottomEdgeAlignedRight">
+                    <MenuItem Header="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[UpdateSubscription]}"
+                              Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).UpdateSubscriptionAsync}"
+                              CommandParameter="{Binding}">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconRefresh}" Width="13" Height="13" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[PingAllServers]}"
+                              Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).PingAllServersAsync}"
+                              CommandParameter="{Binding}">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconSpeedometer}" Width="13" Height="13" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[PinSubscription]}"
+                              Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).PinSubscription}"
+                              CommandParameter="{Binding}">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconPin}" Width="13" Height="13" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[CopySubscriptionUrl]}"
+                              Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).CopySubscriptionUrl}"
+                              CommandParameter="{Binding}">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconCopy}" Width="13" Height="13" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator />
+                    <MenuItem Header="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).Loc[DeleteSubscription]}"
+                              Command="{Binding $parent[UserControl].((vm:SubscriptionsViewModel)DataContext).DeleteSubscription}"
+                              CommandParameter="{Binding}">
+                      <MenuItem.Icon>
+                        <PathIcon Data="{StaticResource IconTrash}" Width="13" Height="13" />
+                      </MenuItem.Icon>
+                    </MenuItem>
+                  </MenuFlyout>
+                </Button.Flyout>
+              </Button>
+
+            </StackPanel>
+          </Grid>
+
+          <!-- 2. PILL PROGRESS BAR (Exact Happ Design: (i) Traffic / Limit | Expire Date | Send Icon) -->
+          <Border Background="{DynamicResource surfaceContainerHigh}"
+                  CornerRadius="16" Padding="12,6">
+            <Grid ColumnDefinitions="Auto,*,Auto,Auto" VerticalAlignment="Center">
+              <PathIcon Grid.Column="0" Data="{StaticResource IconInfo}" Width="14" Height="14"
+                        Foreground="{DynamicResource primary}" Margin="0,0,10,0" VerticalAlignment="Center" />
+
+              <TextBlock Grid.Column="1" Text="{Binding TrafficInfo}"
+                         FontSize="12" FontWeight="Bold" Foreground="{DynamicResource onSurface}"
+                         VerticalAlignment="Center" />
+
+              <TextBlock Grid.Column="2" Text="{Binding ExpireDateText}"
+                         FontSize="11" Foreground="{DynamicResource onSurfaceVariant}"
+                         Margin="0,0,10,0" VerticalAlignment="Center" />
+
+              <PathIcon Grid.Column="3" Data="{StaticResource IconSend}" Width="12" Height="12"
+                        Foreground="{DynamicResource primary}" VerticalAlignment="Center" />
+            </Grid>
+          </Border>
+
+          <!-- 3. CENTERED MULTI-LINE DESCRIPTION TEXT -->
+          <Border Background="{DynamicResource surfaceContainerLow}"
+                  CornerRadius="12" Padding="12,8" Margin="0,2,0,0"
+                  IsVisible="{Binding HasDescription}">
+            <TextBlock Text="{Binding DescriptionText}"
+                       TextAlignment="Center"
+                       FontSize="11.5"
+                       LineHeight="17"
+                       Foreground="{DynamicResource onSurfaceVariant}" />
+          </Border>
+
+          <!-- 4. SERVER LIST -->
+          <ItemsControl ItemsSource="{Binding FilteredServers}"
+                        IsVisible="{Binding IsExpanded}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="models:ServerNode">
+                <views:SwipeableServerItem />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+        </StackPanel>
+      </Border>
+    </DataTemplate>
+  </UserControl.Resources>
+
+  <Grid RowDefinitions="Auto,*">
+
+    <!-- TOP BAR: Title, Search, and Add Button -->
+    <StackPanel Grid.Row="0" Spacing="12" Margin="0,0,0,16">
+
+      <!-- Header: Your subscriptions & Add New Button -->
+      <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+        <TextBlock Grid.Column="0" Text="{Binding Loc[SubscriptionsTitle]}"
+                   FontSize="22" FontWeight="Bold" Foreground="{DynamicResource onSurface}"
+                   VerticalAlignment="Center" />
+
+        <!-- + Add New Button -->
+        <Button Grid.Column="1" Command="{Binding OpenAddDialogCommand}"
+                Classes="m3-tonal-button" CornerRadius="18" Padding="12,6"
+                ToolTip.Tip="{Binding Loc[AddSubscription]}">
+          <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+            <PathIcon Data="{StaticResource IconPlus}" Width="14" Height="14" Foreground="{DynamicResource onSecondaryContainer}" />
+            <TextBlock Text="{Binding Loc[AddSubscription]}" FontSize="12" FontWeight="SemiBold" Foreground="{DynamicResource onSecondaryContainer}" />
+          </StackPanel>
+        </Button>
+      </Grid>
+
+      <!-- Search Box: Type text for search (with magnifying glass) -->
+      <Border Background="{DynamicResource surfaceContainerHigh}"
+              BorderBrush="{DynamicResource outlineVariant}"
+              BorderThickness="1" CornerRadius="20" Padding="12,4">
+        <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+          <PathIcon Grid.Column="0" Data="{StaticResource IconSearch}" Width="16" Height="16"
+                    Foreground="{DynamicResource onSurfaceVariant}" Margin="4,0,8,0" VerticalAlignment="Center" />
+
+          <TextBox Grid.Column="1" Text="{Binding SearchText}"
+                   PlaceholderText="{Binding Loc[SearchPlaceholder]}"
+                   Background="Transparent" BorderThickness="0"
+                   FontSize="13" Padding="0,6" VerticalAlignment="Center" />
+
+          <!-- Clear Search Button -->
+          <Button Grid.Column="2" Command="{Binding ClearSearchCommand}"
+                  Classes="m3-icon-button" Width="24" Height="24"
+                  IsVisible="{Binding SearchText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}"
+                  ToolTip.Tip="{Binding Loc[Close]}">
+            <TextBlock Text="✕" FontSize="11" Foreground="{DynamicResource onSurfaceVariant}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center" />
+          </Button>
+        </Grid>
+      </Border>
+
+    </StackPanel>
+
+    <!-- CONFIGURATIONS LIST (Scrollable Accordion Cards) -->
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <StackPanel Spacing="14">
+
+        <!-- Empty State when NO subscriptions or JSON configs exist -->
+        <Border Classes="m3-card" CornerRadius="22" Padding="28,36"
+                IsVisible="{Binding !SubService.HasAnyConfigs}">
+          <StackPanel Spacing="14" HorizontalAlignment="Center">
+            <Border Width="56" Height="56" CornerRadius="28" Background="{DynamicResource secondaryContainer}"
+                    HorizontalAlignment="Center">
+              <PathIcon Data="{StaticResource IconPlus}" Width="24" Height="24"
+                        Foreground="{DynamicResource onSecondaryContainer}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <TextBlock Text="{Binding Loc[NoSubscriptionsYet]}"
+                       FontSize="13" Foreground="{DynamicResource onSurfaceVariant}"
+                       TextAlignment="Center" TextWrapping="Wrap" MaxWidth="280" />
+            <Button Command="{Binding OpenAddDialogCommand}"
+                    Classes="m3-filled-button" CornerRadius="18" Padding="18,8"
+                    HorizontalAlignment="Center">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <PathIcon Data="{StaticResource IconPlus}" Width="14" Height="14" Foreground="{DynamicResource onPrimary}" />
+                <TextBlock Text="{Binding Loc[AddSubscription]}" FontWeight="SemiBold" />
+              </StackPanel>
+            </Button>
+          </StackPanel>
+        </Border>
+
+        <!-- 1. Subscriptions Group (Shown ONLY if SubService.HasSubscriptions) -->
+        <StackPanel Spacing="10" IsVisible="{Binding SubService.HasSubscriptions}">
+          <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center" Margin="4,2,4,2">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconLightning}" Width="15" Height="15" Foreground="{DynamicResource primary}" />
+              <TextBlock Text="{Binding Loc[SubscriptionsHeader]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              <Border Background="{DynamicResource primaryContainer}" CornerRadius="10" Padding="8,2" VerticalAlignment="Center">
+                <TextBlock Text="{Binding SubService.Subscriptions.Count}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onPrimaryContainer}" />
+              </Border>
+            </StackPanel>
+          </Grid>
+
+          <!-- Subscriptions Items -->
+          <ItemsControl ItemsSource="{Binding SubService.Subscriptions}"
+                        ItemTemplate="{StaticResource SubscriptionCardTemplate}" />
+        </StackPanel>
+
+        <!-- 2. JSON Configurations Group (Shown ONLY if SubService.HasJsonConfigs) -->
+        <StackPanel Spacing="10" Margin="0,10,0,0" IsVisible="{Binding SubService.HasJsonConfigs}">
+          <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center" Margin="4,2,4,2">
+            <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconSparkle}" Width="15" Height="15" Foreground="#ec4899" />
+              <TextBlock Text="{Binding Loc[JsonConfigurationsHeader]}" FontSize="16" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              <Border Background="{DynamicResource secondaryContainer}" CornerRadius="10" Padding="8,2" VerticalAlignment="Center">
+                <TextBlock Text="{Binding SubService.JsonConfigurations.Count}" FontSize="11" FontWeight="Bold" Foreground="{DynamicResource onSecondaryContainer}" />
+              </Border>
+            </StackPanel>
+          </Grid>
+
+          <!-- JSON Configurations Items -->
+          <ItemsControl ItemsSource="{Binding SubService.JsonConfigurations}"
+                        ItemTemplate="{StaticResource SubscriptionCardTemplate}" />
+        </StackPanel>
+
+      </StackPanel>
+    </ScrollViewer>
+
+  </Grid>
+</UserControl>

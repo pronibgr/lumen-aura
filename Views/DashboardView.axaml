@@ -1,0 +1,227 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="650" d:DesignHeight="750"
+             x:Class="aura.Views.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+  <ScrollViewer VerticalScrollBarVisibility="Auto">
+    <StackPanel Spacing="16" Margin="0,0,0,20">
+
+      <!-- TOP HEADER: lumen aura Title (Sandbox pill removed per user request) -->
+      <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+        <StackPanel Grid.Column="0" Spacing="2">
+          <TextBlock Text="lumen aura" FontSize="26" FontWeight="Bold"
+                     Foreground="{DynamicResource onSurface}" />
+          <TextBlock Text="{Binding Loc[AppDescription], FallbackValue='Universal VPN &amp; proxy client'}"
+                     FontSize="12" Foreground="{DynamicResource onSurfaceVariant}" />
+        </StackPanel>
+      </Grid>
+
+      <!-- 1. BIG ROUNDED CONNECTION CARD (per user sketch) -->
+      <Border Background="{DynamicResource surfaceContainerLow}"
+              BorderBrush="{DynamicResource outlineVariant}"
+              BorderThickness="1"
+              CornerRadius="32" Padding="28,28">
+        <StackPanel Spacing="18" HorizontalAlignment="Center">
+
+          <!-- Big Expressive Power Button (ONLY power icon, no 'aura' text per Point 8) -->
+          <Grid HorizontalAlignment="Center" Width="170" Height="170">
+            <!-- Outer subtle rings -->
+            <Border Width="168" Height="168" CornerRadius="999"
+                    BorderThickness="2"
+                    BorderBrush="{DynamicResource primaryContainer}" />
+
+            <Border Width="148" Height="148" CornerRadius="999"
+                    BorderThickness="1.5"
+                    BorderBrush="{DynamicResource secondaryContainer}" />
+
+            <!-- Core Button -->
+            <Button Command="{Binding ToggleConnectionAsync}"
+                    Width="128" Height="128" CornerRadius="999"
+                    HorizontalAlignment="Center" VerticalAlignment="Center"
+                    BorderThickness="0" Cursor="Hand">
+              <Button.Styles>
+                <Style Selector="Button">
+                  <Setter Property="Background" Value="{DynamicResource primary}" />
+                  <Setter Property="RenderTransform" Value="scale(1)" />
+                  <Setter Property="Transitions">
+                    <Transitions>
+                      <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                      <BrushTransition Property="Background" Duration="0:0:0.25" />
+                    </Transitions>
+                  </Setter>
+                </Style>
+                <Style Selector="Button:pointerover">
+                  <Setter Property="Opacity" Value="0.92" />
+                  <Setter Property="RenderTransform" Value="scale(1.05)" />
+                </Style>
+                <Style Selector="Button:pressed">
+                  <Setter Property="RenderTransform" Value="scale(0.95)" />
+                </Style>
+              </Button.Styles>
+
+              <PathIcon Data="{StaticResource IconPower}" Width="44" Height="44"
+                        Foreground="{DynamicResource onPrimary}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Button>
+          </Grid>
+
+          <!-- Large Status Text: 'disconnected' / 'connected' (per user sketch) -->
+          <TextBlock Text="{Binding Engine.StatusText}"
+                     FontSize="24" FontWeight="Bold"
+                     Foreground="{DynamicResource onSurface}"
+                     HorizontalAlignment="Center" />
+
+        </StackPanel>
+      </Border>
+
+      <!-- 2. CONNECTION TIME CARD: connection time: 00:00:00 (per user sketch) -->
+      <Border Background="{DynamicResource surfaceContainerHigh}"
+              BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+              CornerRadius="20" Padding="20,10" HorizontalAlignment="Center">
+        <StackPanel Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+          <PathIcon Data="{StaticResource IconTimer}" Width="16" Height="16" Foreground="{DynamicResource primary}" />
+          <TextBlock Text="{Binding Loc[Duration]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="13" VerticalAlignment="Center" />
+          <TextBlock Text="{Binding Engine.ConnectionDuration}"
+                     Foreground="{DynamicResource onSurface}" FontSize="16" FontWeight="Bold"
+                     FontFamily="Monospace" VerticalAlignment="Center" />
+        </StackPanel>
+      </Border>
+
+      <!-- 3. THREE TELEMETRY CARDS (Download, Upload, Data - per user sketch) -->
+      <Grid ColumnDefinitions="*,*,*">
+        <!-- Download -->
+        <Border Grid.Column="0" Classes="m3-card" CornerRadius="20" Margin="0,0,6,0" Padding="14,14">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconArrowDown}" Width="16" Height="16" Foreground="{DynamicResource primary}" />
+              <TextBlock Text="{Binding Loc[DownloadSpeed]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="12" FontWeight="SemiBold" />
+            </StackPanel>
+            <TextBlock Text="{Binding Engine.DownloadSpeed}" Foreground="{DynamicResource onSurface}"
+                       FontSize="18" FontWeight="Bold" Margin="0,2,0,0" />
+          </StackPanel>
+        </Border>
+
+        <!-- Upload -->
+        <Border Grid.Column="1" Classes="m3-card" CornerRadius="20" Margin="3,0,3,0" Padding="14,14">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconArrowUp}" Width="16" Height="16" Foreground="{DynamicResource secondary}" />
+              <TextBlock Text="{Binding Loc[UploadSpeed]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="12" FontWeight="SemiBold" />
+            </StackPanel>
+            <TextBlock Text="{Binding Engine.UploadSpeed}" Foreground="{DynamicResource onSurface}"
+                       FontSize="18" FontWeight="Bold" Margin="0,2,0,0" />
+          </StackPanel>
+        </Border>
+
+        <!-- Data Transferred -->
+        <Border Grid.Column="2" Classes="m3-card" CornerRadius="20" Margin="6,0,0,0" Padding="14,12">
+          <StackPanel Spacing="6">
+            <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+              <Border Width="16" Height="16" CornerRadius="4" Background="{DynamicResource primaryContainer}"
+                      VerticalAlignment="Center">
+                <TextBlock Text="01" FontSize="9" FontWeight="Bold"
+                           Foreground="{DynamicResource onPrimaryContainer}"
+                           HorizontalAlignment="Center" VerticalAlignment="Center" />
+              </Border>
+              <TextBlock Text="{Binding Loc[TotalTraffic]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="12" FontWeight="SemiBold" />
+            </StackPanel>
+            <TextBlock Text="{Binding Engine.TotalTransferred}" Foreground="{DynamicResource onSurface}"
+                       FontSize="18" FontWeight="Bold" Margin="0,2,0,0" />
+            <TextBlock Text="unlimited quota" Foreground="{DynamicResource outline}" FontSize="10.5" />
+          </StackPanel>
+        </Border>
+      </Grid>
+
+      <!-- 4. ACTIVE SERVER DETAILS CARD (Normalized layout, Point 11) -->
+      <Border Classes="m3-card" CornerRadius="22" Padding="16,14">
+        <Grid>
+          <!-- When ActiveServer is selected -->
+          <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center"
+                IsVisible="{Binding ActiveServer, Converter={x:Static ObjectConverters.IsNotNull}}">
+
+            <!-- Flag Emoji / Country Badge -->
+            <Border Grid.Column="0" Background="{DynamicResource secondaryContainer}"
+                    CornerRadius="12" Width="44" Height="44" Margin="0,0,12,0"
+                    VerticalAlignment="Center">
+              <TextBlock Text="{Binding ActiveServer.FlagEmoji}"
+                         FontSize="20" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+
+            <!-- Server Details (Tight spacing, no gap) -->
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Loc[SelectedNode]}" Foreground="{DynamicResource onSurfaceVariant}" FontSize="11" />
+                <Border Background="{DynamicResource primaryContainer}" CornerRadius="6" Padding="5,1">
+                  <TextBlock Text="{Binding ActiveServer.Protocol}"
+                             Foreground="{DynamicResource onPrimaryContainer}" FontSize="10" FontWeight="Bold" />
+                </Border>
+                <TextBlock Text="{Binding ActiveServer.TransportSecurity}"
+                           Foreground="{DynamicResource outline}" FontSize="10.5" TextTrimming="CharacterEllipsis" MaxWidth="180" />
+              </StackPanel>
+
+              <TextBlock Text="{Binding ActiveServer.DisplayName}"
+                         Foreground="{DynamicResource onSurface}" FontSize="14" FontWeight="SemiBold"
+                         TextTrimming="CharacterEllipsis" MaxWidth="320"
+                         HorizontalAlignment="Left" TextAlignment="Left" />
+
+              <TextBlock Text="{Binding ActiveServer.Host}"
+                         Foreground="{DynamicResource outline}" FontSize="11" />
+            </StackPanel>
+
+            <Border Grid.Column="2" Background="{Binding ActiveServer.PingBadgeBackground}"
+                    CornerRadius="12" Padding="10,5" VerticalAlignment="Center"
+                    IsVisible="{Binding ActiveServer.IsPingBadgeVisible}">
+              <Border.Transitions>
+                <Transitions>
+                  <BrushTransition Property="Background" Duration="0:0:0.45" Easing="CubicEaseInOut" />
+                  <DoubleTransition Property="Opacity" Duration="0:0:0.3" Easing="CubicEaseInOut" />
+                </Transitions>
+              </Border.Transitions>
+              <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <PathIcon Data="{StaticResource IconLanguage}" Width="14" Height="14"
+                          Foreground="{Binding ActiveServer.PingStatusColor}">
+                  <PathIcon.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Foreground" Duration="0:0:0.45" Easing="CubicEaseInOut" />
+                    </Transitions>
+                  </PathIcon.Transitions>
+                </PathIcon>
+                <TextBlock Text="{Binding ActiveServer.DisplayPing}"
+                           Foreground="{Binding ActiveServer.PingStatusColor}"
+                           FontWeight="Bold" FontSize="12.5">
+                  <TextBlock.Transitions>
+                    <Transitions>
+                      <BrushTransition Property="Foreground" Duration="0:0:0.45" Easing="CubicEaseInOut" />
+                    </Transitions>
+                  </TextBlock.Transitions>
+                </TextBlock>
+              </StackPanel>
+            </Border>
+          </Grid>
+
+          <!-- When NO Server is selected -->
+          <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center"
+                IsVisible="{Binding ActiveServer, Converter={x:Static ObjectConverters.IsNull}}">
+            <Border Grid.Column="0" Background="{DynamicResource surfaceContainerHigh}"
+                    CornerRadius="12" Width="44" Height="44" Margin="0,0,12,0"
+                    VerticalAlignment="Center">
+              <PathIcon Data="{StaticResource IconLanguage}" Width="20" Height="20"
+                        Foreground="{DynamicResource outline}"
+                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+            </Border>
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+              <TextBlock Text="{Binding Loc[NoServerSelected]}" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource onSurface}" />
+              <TextBlock Text="{Binding Loc[SelectServerPrompt]}" FontSize="11.5" Foreground="{DynamicResource onSurfaceVariant}" />
+            </StackPanel>
+          </Grid>
+        </Grid>
+      </Border>
+
+    </StackPanel>
+  </ScrollViewer>
+
+</UserControl>

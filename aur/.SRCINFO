@@ -1,0 +1,28 @@
+pkgbase = lumen-aura
+	pkgdesc = Universal cross-platform VPN and proxy client in Material 3 Expressive design
+	pkgver = 1.0
+	pkgrel = 1
+	url = https://github.com/lumen-aura/aura
+	arch = x86_64
+	license = MIT
+	makedepends = dotnet-sdk>=8.0
+	depends = dotnet-runtime
+	depends = fontconfig
+	depends = libx11
+	depends = libice
+	depends = libsm
+	depends = libxcursor
+	depends = libxext
+	depends = libxi
+	depends = libxrandr
+	options = !strip
+	source = lumen-aura.desktop
+	source = lumen-aura.sh
+	source = aura.png
+	source = LICENSE
+	sha256sums = 558b1b07276ac9f86a534e5527db94f277b6425178588b8be1270f799e41eb50
+	sha256sums = 81789577d0e369284af5717cbfa464f4d8bd19009b36cba6674d7352880efb5c
+	sha256sums = 7d21f8d3e88b55c4336aed240d518a09e458e34ce6953efa76f9b0c220b77233
+	sha256sums = 12c04baa22d508f53175a9b5f06cf61fbd5a4ab8e1fc5e722d006084a73ce64c
+
+pkgname = lumen-aura

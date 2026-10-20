@@ -1,0 +1,163 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             xmlns:models="using:aura.Models"
+             mc:Ignorable="d" d:DesignWidth="850" d:DesignHeight="700"
+             x:Class="aura.Views.RoutingView"
+             x:DataType="vm:RoutingViewModel">
+
+  <Grid>
+    <StackPanel Spacing="20">
+
+      <!-- Friendly Guidance Banner (M3 Expressive) -->
+      <Border Background="{DynamicResource secondaryContainer}" BorderBrush="{DynamicResource outlineVariant}" BorderThickness="1"
+              CornerRadius="20" Padding="18,14">
+        <Grid ColumnDefinitions="Auto,*" VerticalAlignment="Center">
+          <PathIcon Grid.Column="0" Data="{StaticResource IconShieldCheck}" Width="22" Height="22"
+                    Foreground="{DynamicResource onSecondaryContainer}" Margin="0,0,12,0" VerticalAlignment="Top" />
+          <TextBlock Grid.Column="1" Text="{Binding Loc[RoutingFriendlyNotice]}"
+                     Foreground="{DynamicResource onSecondaryContainer}" FontSize="12.5" LineHeight="19"
+                     TextWrapping="Wrap" />
+        </Grid>
+      </Border>
+
+      <!-- 3 Routing Mode Option Cards (Using transparent-card-btn to eliminate square shadows) -->
+      <StackPanel Spacing="10">
+
+        <!-- Option 0: Пускать весь трафик через VPN -->
+        <Button Command="{Binding SetModeCommand}" CommandParameter="0"
+                Classes="transparent-card-btn">
+          <Border Classes="m3-card" CornerRadius="18" Padding="16,14">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Grid.Column="0" Width="22" Height="22" CornerRadius="11"
+                      BorderBrush="{DynamicResource primary}" BorderThickness="2" Margin="0,0,14,0"
+                      VerticalAlignment="Center">
+                <Ellipse Width="12" Height="12" Fill="{DynamicResource primary}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         IsVisible="{Binding IsRoutingAll}" />
+              </Border>
+
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Loc[RoutingModeAll]}"
+                           FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[RoutingModeAllSub]}"
+                           FontSize="11.5" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </Button>
+
+        <!-- Option 1: НЕ пускать трафик в выбранных приложениях -->
+        <Button Command="{Binding SetModeCommand}" CommandParameter="1"
+                Classes="transparent-card-btn">
+          <Border Classes="m3-card" CornerRadius="18" Padding="16,14">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Grid.Column="0" Width="22" Height="22" CornerRadius="11"
+                      BorderBrush="{DynamicResource primary}" BorderThickness="2" Margin="0,0,14,0"
+                      VerticalAlignment="Center">
+                <Ellipse Width="12" Height="12" Fill="{DynamicResource primary}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         IsVisible="{Binding IsRoutingBypass}" />
+              </Border>
+
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Loc[RoutingModeBypass]}"
+                           FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[RoutingModeBypassSub]}"
+                           FontSize="11.5" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </Button>
+
+        <!-- Option 2: Пускать трафик ТОЛЬКО из выбранных приложений -->
+        <Button Command="{Binding SetModeCommand}" CommandParameter="2"
+                Classes="transparent-card-btn">
+          <Border Classes="m3-card" CornerRadius="18" Padding="16,14">
+            <Grid ColumnDefinitions="Auto,*">
+              <Border Grid.Column="0" Width="22" Height="22" CornerRadius="11"
+                      BorderBrush="{DynamicResource primary}" BorderThickness="2" Margin="0,0,14,0"
+                      VerticalAlignment="Center">
+                <Ellipse Width="12" Height="12" Fill="{DynamicResource primary}"
+                         HorizontalAlignment="Center" VerticalAlignment="Center"
+                         IsVisible="{Binding IsRoutingOnly}" />
+              </Border>
+
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Loc[RoutingModeOnly]}"
+                           FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource onSurface}" />
+                <TextBlock Text="{Binding Loc[RoutingModeOnlySub]}"
+                           FontSize="11.5" Foreground="{DynamicResource onSurfaceVariant}" />
+              </StackPanel>
+            </Grid>
+          </Border>
+        </Button>
+
+      </StackPanel>
+
+      <!-- Selected Applications Section -->
+      <Border Classes="m3-card" CornerRadius="20" Padding="18">
+        <StackPanel Spacing="14">
+
+          <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+            <StackPanel Grid.Column="0" Spacing="2">
+              <TextBlock Text="{Binding Loc[SelectedAppsHeader]}"
+                         FontSize="15" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+              <TextBlock Text="Applications participating in split tunneling rules"
+                         FontSize="11.5" Foreground="{DynamicResource onSurfaceVariant}" />
+            </StackPanel>
+
+            <Button Grid.Column="1" Command="{Binding OpenAddAppDialogCommand}"
+                    Classes="m3-filled-button" CornerRadius="16" Padding="14,8">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <PathIcon Data="{StaticResource IconPlus}" Width="14" Height="14" Foreground="{DynamicResource onPrimary}" />
+                <TextBlock Text="{Binding Loc[AddApplication]}" FontSize="12" />
+              </StackPanel>
+            </Button>
+          </Grid>
+
+          <!-- Empty list state -->
+          <Border Background="{DynamicResource surfaceContainerHigh}" CornerRadius="14" Padding="14"
+                  IsVisible="{Binding SelectedApplications.Count, Converter={x:Static ObjectConverters.Equal}, ConverterParameter=0}">
+            <TextBlock Text="{Binding Loc[NoAppsSelected]}" Foreground="{DynamicResource onSurfaceVariant}"
+                       FontSize="12" HorizontalAlignment="Center" />
+          </Border>
+
+          <!-- List of Selected Apps -->
+          <ItemsControl ItemsSource="{Binding SelectedApplications}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate DataType="models:ProcessItem">
+                <Border Background="{DynamicResource surfaceContainerHigh}" CornerRadius="14"
+                        Padding="14,10" Margin="0,3">
+                  <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                    <Border Grid.Column="0" Width="36" Height="36" CornerRadius="10"
+                            Background="{DynamicResource secondaryContainer}" Margin="0,0,12,0">
+                      <TextBlock Text="{Binding DisplayName[0]}" FontSize="16" FontWeight="Bold"
+                                 Foreground="{DynamicResource onSecondaryContainer}"
+                                 HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Border>
+
+                    <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                      <TextBlock Text="{Binding DisplayName}" FontWeight="SemiBold" FontSize="13" Foreground="{DynamicResource onSurface}" />
+                      <TextBlock Text="{Binding Path}" FontSize="11" Foreground="{DynamicResource outline}" />
+                    </StackPanel>
+
+                    <Button Grid.Column="2" Command="{Binding $parent[UserControl].((vm:RoutingViewModel)DataContext).RemoveApplicationCommand}"
+                            CommandParameter="{Binding}"
+                            Classes="m3-icon-button" Width="32" Height="32" ToolTip.Tip="Remove">
+                      <PathIcon Data="{StaticResource IconTrash}" Width="14" Height="14" Foreground="{DynamicResource onSurfaceVariant}" />
+                    </Button>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+
+        </StackPanel>
+      </Border>
+
+    </StackPanel>
+  </Grid>
+</UserControl>

@@ -1,0 +1,182 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:aura.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="700"
+             x:Class="aura.Views.LogsView"
+             x:DataType="vm:LogsViewModel">
+
+  <Grid RowDefinitions="Auto,Auto,*" Margin="24,18">
+
+    <!-- Header Section (per Screenshot 3) -->
+    <StackPanel Grid.Row="0" Spacing="6" Margin="0,0,0,14">
+      <TextBlock Text="{Binding Loc[NavLogs]}" FontSize="24" FontWeight="Bold" Foreground="{DynamicResource onSurface}" />
+
+      <!-- Subtitle hint: Нажмите Ctrl+R, чтобы создать отчёт -->
+      <StackPanel Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+        <PathIcon Data="{StaticResource IconInfo}" Width="15" Height="15" Foreground="{DynamicResource primary}" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Loc[LogsReportHint]}" FontSize="12.5" Foreground="{DynamicResource onSurfaceVariant}" VerticalAlignment="Center" />
+      </StackPanel>
+    </StackPanel>
+
+    <!-- Horizontal Tabs Row (per Screenshot 3) -->
+    <Border Grid.Row="1" Background="{DynamicResource surfaceContainerHigh}"
+            CornerRadius="16" Padding="6,4" Margin="0,0,0,14">
+      <Grid ColumnDefinitions="*,Auto" VerticalAlignment="Center">
+
+        <!-- Left: Pill Tab Buttons -->
+        <ScrollViewer Grid.Column="0" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+          <StackPanel Orientation="Horizontal" Spacing="4">
+
+            <!-- 1. Основной лог -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="main"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsMainActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabMain]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsMainActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabMain]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsMainActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 2. Лог ядра -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="core"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsCoreActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabCore]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsCoreActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabCore]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsCoreActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 3. Лог туннеля -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="tunnel"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsTunnelActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabTunnel]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsTunnelActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabTunnel]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsTunnelActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 4. Лог AntiFilter -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="antifilter"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsAntiFilterActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabAntiFilter]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsAntiFilterActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabAntiFilter]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsAntiFilterActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 5. Лог подписок -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="subscriptions"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsSubscriptionsActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabSubscriptions]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsSubscriptionsActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabSubscriptions]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsSubscriptionsActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 6. Лог службы -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="service"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsServiceActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabService]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsServiceActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabService]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsServiceActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+            <!-- 7. Лог пушей -->
+            <Button Command="{Binding SelectTabCommand}" CommandParameter="push"
+                    Classes="transparent-card-btn" CornerRadius="10">
+              <Border CornerRadius="10" Padding="12,6">
+                <Grid>
+                  <Border CornerRadius="10" Background="{DynamicResource secondaryContainer}" IsVisible="{Binding IsPushActive}" />
+                  <TextBlock Text="{Binding Loc[LogTabPush]}" FontSize="12.5" FontWeight="SemiBold"
+                             Foreground="{DynamicResource onSecondaryContainer}" IsVisible="{Binding IsPushActive}" HorizontalAlignment="Center" Margin="8,0" />
+                  <TextBlock Text="{Binding Loc[LogTabPush]}" FontSize="12.5" FontWeight="Medium"
+                             Foreground="{DynamicResource onSurfaceVariant}" IsVisible="{Binding !IsPushActive}" HorizontalAlignment="Center" Margin="8,0" />
+                </Grid>
+              </Border>
+            </Button>
+
+          </StackPanel>
+        </ScrollViewer>
+
+        <!-- Right: Actions Flyout (•••) -->
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+          <Button Classes="m3-icon-button" Width="32" Height="32" ToolTip.Tip="Options">
+            <PathIcon Data="{StaticResource IconMoreHorizontal}" Width="16" Height="16" />
+            <Button.Flyout>
+              <MenuFlyout Placement="BottomEdgeAlignedRight">
+                <MenuItem Header="{Binding Loc[LogsCopyAll]}" Command="{Binding CopyAllLogsCommand}">
+                  <MenuItem.Icon>
+                    <PathIcon Data="{StaticResource IconCopy}" Width="14" Height="14" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="{Binding Loc[LogsGenerateReport]}" Command="{Binding GenerateReportCommand}">
+                  <MenuItem.Icon>
+                    <PathIcon Data="{StaticResource IconLogFile}" Width="14" Height="14" />
+                  </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem Header="{Binding Loc[LogsClear]}" Command="{Binding ClearLogsCommand}">
+                  <MenuItem.Icon>
+                    <PathIcon Data="{StaticResource IconTrash}" Width="14" Height="14" />
+                  </MenuItem.Icon>
+                </MenuItem>
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+        </StackPanel>
+
+      </Grid>
+    </Border>
+
+    <!-- Log Console Container -->
+    <Border Grid.Row="2" Classes="m3-card" CornerRadius="20" Padding="16,14">
+      <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+        <ItemsControl ItemsSource="{Binding LogService.DisplayLogs}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate>
+              <SelectableTextBlock Text="{Binding}"
+                                   FontFamily="Consolas, JetBrains Mono, Cascadia Code, Monospace, monospace"
+                                   FontSize="12"
+                                   LineHeight="20"
+                                   Foreground="{DynamicResource onSurface}"
+                                   Margin="0,1" />
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </Border>
+
+  </Grid>
+</UserControl>

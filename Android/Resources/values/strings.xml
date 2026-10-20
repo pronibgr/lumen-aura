@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <string name="app_name">lumen aura</string>
+  <string name="vpn_channel_name">lumen aura VPN Service</string>
+  <string name="vpn_channel_desc">Active VPN connection notifications</string>
+  <string name="vpn_connected">Connected to VPN</string>
+  <string name="vpn_disconnect">Disconnect</string>
+</resources>
